@@ -21,10 +21,11 @@ func main() {
 	if err != nil {
 		panic("register err:" + err.Error())
 	}
-	obj := oss.Invoker("myoss")
-	key := obj.GenerateKey("mock")
 
-	err = obj.PutObjectFromFile(key, "../image/oss.jpg")
+	ossClient := oss.Invoker("myoss")
+	dstPath := ossClient.GenerateKey("mock")
+
+	err = ossClient.PutObjectFromFile(dstPath, "../image/oss.jpg")
 	if err != nil {
 		panic(err)
 	}
