@@ -1,2 +1,4 @@
 # beemod
-beemod
+* oss
+    * file
+    * alioss
