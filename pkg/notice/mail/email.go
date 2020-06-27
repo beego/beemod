@@ -15,7 +15,6 @@ type EMailServe struct{}
 type EMail struct {
 	// 接收邮件用户 可以多个邮箱地址
 	Users []string
-
 	// 邮件主题
 	Subject string
 	// 邮件内容
