@@ -24,8 +24,7 @@ func main() {
 
 	ossClient := oss.Invoker("myoss")
 	dstPath := ossClient.GenerateKey("mock")
-
-	err = ossClient.PutObjectFromFile(dstPath, "../image/oss.jpg")
+	err = ossClient.PutObjectFromFile(dstPath, "/Users/ding/Documents/beemod/example/oss/image/oss.jpg")
 	if err != nil {
 		panic(err)
 	}

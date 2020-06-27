@@ -1,12 +1,15 @@
 package module
 
-const ConfigPrefix = "beego."
-
-const OssName = "oss"
+const (
+	ConfigPrefix = "beego."
+	OssName      = "oss"
+	NoticeName   = "notice"
+)
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
+	{Name: NoticeName},
 }
 
 type invokerAttr struct {

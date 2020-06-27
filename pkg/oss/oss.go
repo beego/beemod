@@ -2,6 +2,7 @@ package oss
 
 import (
 	"errors"
+	"fmt"
 	"github.com/beego-dev/beemod/pkg/module"
 	"github.com/beego-dev/beemod/pkg/oss/alioss"
 	"github.com/beego-dev/beemod/pkg/oss/file"
@@ -137,5 +138,7 @@ func (c *Client) ShowImgArr(imgs []string, style ...string) (urlArr []string) {
 func (c *Client) GenerateKey(prefix string) string {
 	month := time.Now().Format("200601")
 	// object路径开头不能与“/”
-	return prefix + "/" + month + "/" + strings.ReplaceAll(uuid.NewV4().String(), "-", "") + ".jpg"
+	path := prefix + "/" + month + "/" + strings.ReplaceAll(uuid.NewV4().String(), "-", "") + ".jpg"
+	fmt.Println(path)
+	return path
 }
