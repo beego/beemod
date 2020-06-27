@@ -1,15 +1,15 @@
 package module
 
 const (
-	ConfigPrefix = "beego."
-	OssName      = "oss"
-	NoticeName   = "notice"
+	ConfigPrefix   = "beego."
+	OssName        = "oss"
+	NoticeMailName = "notice.MAIL"
 )
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
-	{Name: NoticeName},
+	{Name: NoticeMailName},
 }
 
 type invokerAttr struct {
