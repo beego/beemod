@@ -12,13 +12,20 @@ import (
 func TestEMailServe_BuildDialer(t *testing.T) {
 	es := New()
 	parmas := make(map[string]string, 5)
-	parmas["ServerHost"] = "xxxxxxx"
-	parmas["ServerPort"] = "xxxxxxx"
-	parmas["FromEmail"] = "xxxxxxx"
-	parmas["FromPassword"] = "xxxxxxx"
+	parmas["ServerHost"] = "smtp.qq.com"
+	parmas["ServerPort"] = "25"
+	parmas["FromEmail"] = "1423119397@qq.com"
+	parmas["FromPassword"] = "xxxx"
 	d, err := es.BuildDialer(parmas)
 	if err != nil {
 		t.Fatal(err)
 	}
-	d.DialAndSend()
+	mail, err := NewMail("deen.job@qq.com", "测试邮件", "邮件内容测试", d)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = mail.Send()
+	if err != nil {
+		t.Log(err)
+	}
 }

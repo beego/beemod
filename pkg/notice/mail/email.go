@@ -15,8 +15,7 @@ type EMailServe struct{}
 type EMail struct {
 	// 接收邮件用户 可以多个邮箱地址
 	Users []string
-	// 抄送地址
-	CopyTo []string
+
 	// 邮件主题
 	Subject string
 	// 邮件内容
@@ -40,19 +39,16 @@ func (ms EMailServe) BuildDialer(params map[string]string) (*gomail.Dialer, erro
 	return gomail.NewDialer(params["ServerHost"], port, params["FromEmail"], params["FromPassword"]), nil
 }
 
-func NewMail(usersEmailAddr, copyToUsersAddr, subject, body string, dialer *gomail.Dialer) (*EMail, error) {
+func NewMail(usersEmailAddr, subject, body string, dialer *gomail.Dialer) (*EMail, error) {
 	if len(usersEmailAddr) <= 0 {
 		return nil, errors.New("email addr is null")
 	}
-	if len(copyToUsersAddr) <= 0 {
-		return nil, errors.New("copy to email addr is null")
-	}
+
 	if len(subject) <= 0 || len(body) <= 0 {
 		return nil, errors.New("email subject or body is null")
 	}
 	return &EMail{
 		Users:   strings.Split(usersEmailAddr, ","),
-		CopyTo:  strings.Split(copyToUsersAddr, ","),
 		Subject: subject,
 		Body:    body,
 		Dialer:  dialer,
