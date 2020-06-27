@@ -4,6 +4,6 @@
     * alioss
     
 * notice
-   * sms  √
-   * mail  ❎
+   * sms  ❎
+   * mail  👨‍💻‍（dev loading....）
    * dingtalk ❎
