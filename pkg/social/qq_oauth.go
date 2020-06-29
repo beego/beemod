@@ -128,7 +128,7 @@ func (c *QQClient) OpenID(token string) (*AuthInfo, error) {
 
 //get userInfo
 func (c *QQClient) Info(token, openID string) (*QQUserInfo, error) {
-	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s", token, conn.appID, openID))
+	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s", token, c.AppID, openID))
 
 	var b []byte
 	if b, err = ioutil.ReadAll(resp.Body); err != nil {
