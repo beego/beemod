@@ -2,13 +2,20 @@ package module
 
 const ConfigPrefix = "beego."
 
-const OssName = "oss"
-const DingName = "ding"
+const (
+	OssName     = "oss"
+	SessionName = "session"
+  Oauth2Name  = "oauth2"
+  DingName    = "ding"
+)
+
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
   {DingName},
+	{Oauth2Name},
+	{SessionName},
 }
 
 type invokerAttr struct {
