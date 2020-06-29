@@ -19,10 +19,11 @@ package social
 	app_secret  = "app_secret"
 */
 type InvokerCfg struct {
-	Debug     bool
-	Mode      string
-	AppID     string
-	AppSecret string
+	Debug       bool
+	Mode        string
+	AppID       string
+	AppSecret   string
+	RedirectURI string
 }
 
 var DefaultInvokerCfg = InvokerCfg{

@@ -13,6 +13,8 @@ type QQClient struct {
 	AppID       string
 	AppKey      string
 	RedirectURI string
+	Name        string
+	OpenID      string
 }
 type QQ_Error struct {
 	Error             int    `json:"error"`
@@ -61,7 +63,7 @@ func (c *QQClient) LoginPage(state string) string {
 }
 
 //get token
-func (c *QQClient) Token(code string) (string, error) {
+func (c *QQClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
 
 	params := make(url.Values)
 	params.Add("grant_type", "authorization_code")
@@ -73,16 +75,16 @@ func (c *QQClient) Token(code string) (string, error) {
 
 	resp, err := http.Get("https://graph.qq.com/oauth2.0/token?" + params.Encode())
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	var b []byte
 	if b, err = ioutil.ReadAll(resp.Body); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	urls, err := url.ParseQuery(string(b))
 	if err != nil {
-		return "", err
+		return nil, err
 
 	}
 
@@ -90,16 +92,18 @@ func (c *QQClient) Token(code string) (string, error) {
 	if token == "" {
 		e := &errMsg{}
 		if err = errorUnmarshal(b, e); err != nil {
-			return "", err
+			return nil, err
 		}
 		err = errors.New(fmt.Sprintf("Error code %d: %s", e.Error, e.ErrorMsg))
 	}
-	return token, nil
+	basicToken := &BasicTokenInfo{}
+	basicToken.AccessToken = token
+	return basicToken, nil
 }
 
 //get OpenID
-func (c *QQClient) OpenID(token string) (*AuthInfo, error) {
-	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/oauth2.0/me?access_token=%s&unionid=1", token))
+func (c *QQClient) GetOpenID(accessToken string) (*AuthInfo, error) {
+	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/oauth2.0/me?access_token=%s&unionid=1", accessToken))
 
 	var b []byte
 	if b, err = ioutil.ReadAll(resp.Body); err != nil {
@@ -122,13 +126,13 @@ func (c *QQClient) OpenID(token string) (*AuthInfo, error) {
 		err = errors.New(fmt.Sprintf("Error code %d: %s", e.Error, e.ErrorMsg))
 		return nil, err
 	}
-
+	c.OpenID = res.OpenID
 	return res, nil
 }
 
 //get userInfo
-func (c *QQClient) Info(token, openID string) (*QQUserInfo, error) {
-	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s", token, c.AppID, openID))
+func (c *QQClient) GetUserInfo(accessToken string) (*BasicUserInfo, error) {
+	resp, err := http.Get(fmt.Sprintf("https://graph.qq.com/user/get_user_info?access_token=%s&oauth_consumer_key=%s&openid=%s", accessToken, c.AppID, c.OpenID))
 
 	var b []byte
 	if b, err = ioutil.ReadAll(resp.Body); err != nil {
@@ -144,6 +148,20 @@ func (c *QQClient) Info(token, openID string) (*QQUserInfo, error) {
 		return nil, err
 
 	}
-
-	return res, nil
+	basicUser := &BasicUserInfo{
+		NickName: res.Nickname,
+		HeadIcon: res.Fig,
+	}
+	return basicUser, nil
+}
+func (c *QQClient) GetType() string {
+	return c.Name
+}
+func NewQQauth2Service(appID, appKey, redirectURI string) SocialService {
+	return &QQClient{
+		AppID:       appID,
+		AppKey:      appKey,
+		RedirectURI: redirectURI,
+		Name:        "qq",
+	}
 }

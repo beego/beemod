@@ -105,6 +105,8 @@ func provider(cfg InvokerCfg) (client SocialService, err error) {
 		client = NewWxOauth2Service(cfg.AppID, cfg.AppSecret)
 	} else if cfg.Mode == "github" {
 		client = NewGithubOauth2Service(cfg.AppID, cfg.AppSecret)
+	} else if cfg.Mode == "qq" {
+		client = NewQQauth2Service(cfg.AppID, cfg.AppSecret, cfg.RedirectURI)
 	} else {
 		err = errors.New("oauth2 mode not exist")
 		return
