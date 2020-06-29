@@ -9,12 +9,13 @@ const (
 	SmsName     = "sms"
 	MailName    = "mail"
   DingName    = "ding"
+  CacheName = "cache"
 )
-
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
+	{CacheName},
   {DingName},
 	{Oauth2Name},
 	{SessionName},
