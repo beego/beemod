@@ -14,6 +14,7 @@ type WxClient struct {
 	AccessToken string
 	OpenID      string
 	Name        string
+	RedirectURI string
 }
 
 type wxGetTokenResponse struct {
@@ -32,12 +33,18 @@ type wxGetWxInfoResponse struct {
 	ErrorMsg   string `json:"errmsg"`
 }
 
-func NewWxOauth2Service(app_id, app_secret string) SocialService {
+func NewWxOauth2Service(app_id, app_secret, redirectURI string) SocialService {
 	return &WxClient{
-		AppID:     app_id,
-		AppSecret: app_secret,
-		Name:      "wx",
+		AppID:       app_id,
+		AppSecret:   app_secret,
+		RedirectURI: redirectURI,
+		Name:        "wx",
 	}
+}
+
+//get login page
+func (c *WxClient) LoginPage(state string) string {
+	return "https://open.weixin.qq.com/connect/qrconnect?appid=" + c.AppID + "&redirect_uri=" + c.RedirectURI + "&response_type=code&scope=snsapi_login&state=" + state
 }
 
 func (c *WxClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
@@ -53,7 +60,7 @@ func (c *WxClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
 	q.Add("secret", c.AppSecret)
 	q.Add("grant_type", "authorization_code")
 	req.URL.RawQuery = q.Encode()
-	// 发送请求并获取响应
+
 	var client = http.Client{
 		Timeout: 10 * time.Second,
 	}
@@ -73,11 +80,12 @@ func (c *WxClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
 	}
 	basicToken := BasicTokenInfo{}
 	basicToken.AccessToken = ret.AccessToken
+	c.OpenID = ret.Openid
 	return &basicToken, nil
 }
 
 func (c *WxClient) GetUserInfo(accessToken string) (*BasicUserInfo, error) {
-	// 形成请求
+
 	var openIdUrl = "https://api.weixin.qq.com/sns/userinfo"
 	var req *http.Request
 	var err error
@@ -88,7 +96,7 @@ func (c *WxClient) GetUserInfo(accessToken string) (*BasicUserInfo, error) {
 	q.Add("access_token", accessToken)
 	q.Add("openid", c.OpenID)
 	req.URL.RawQuery = q.Encode()
-	// 发送请求并获取响应
+
 	var client = http.Client{
 		Timeout: 10 * time.Second,
 	}

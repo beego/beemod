@@ -14,6 +14,7 @@ type GithubClient struct {
 	AccessToken string
 	OpenID      string
 	Name        string
+	RedirectURI string
 }
 
 type githubGetTokenResponse struct {
@@ -25,12 +26,18 @@ type githubGetInfoResponse struct {
 	HeadImgurl string `json:"avatar_url"`
 }
 
-func NewGithubOauth2Service(app_id, app_secret string) SocialService {
+func NewGithubOauth2Service(app_id, app_secret, redirectURI string) SocialService {
 	return &GithubClient{
-		AppID:     app_id,
-		AppSecret: app_secret,
-		Name:      "github",
+		AppID:       app_id,
+		AppSecret:   app_secret,
+		RedirectURI: redirectURI,
+		Name:        "github",
 	}
+}
+
+//get login page github state empty string
+func (c *GithubClient) LoginPage(state string) string {
+	return "https://github.com/login/oauth/authorize?client_id=" + c.AppID + "&redirect_uri=" + c.RedirectURI
 }
 
 func (c *GithubClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
@@ -46,7 +53,6 @@ func (c *GithubClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
 	q.Add("client_id", c.AppID)
 	q.Add("client_secret", c.AppSecret)
 	req.URL.RawQuery = q.Encode()
-	// 发送请求并获取响应
 	var client = http.Client{
 		Timeout: 10 * time.Second,
 	}
@@ -70,7 +76,6 @@ func (c *GithubClient) GetAccessToken(code string) (*BasicTokenInfo, error) {
 }
 
 func (c *GithubClient) GetUserInfo(accessToken string) (*BasicUserInfo, error) {
-	// 形成请求
 	var openIdUrl = "https://api.weixin.qq.com/sns/userinfo"
 	var req *http.Request
 	var err error
@@ -79,7 +84,6 @@ func (c *GithubClient) GetUserInfo(accessToken string) (*BasicUserInfo, error) {
 	}
 
 	req.Header.Add("Authorization", "token "+accessToken)
-	// 发送请求并获取响应
 	var client = http.Client{
 		Timeout: 10 * time.Second,
 	}
