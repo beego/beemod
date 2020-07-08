@@ -8,19 +8,21 @@ const (
 	Oauth2Name  = "oauth2"
 	SmsName     = "sms"
 	MailName    = "mail"
-  DingName    = "ding"
-  CacheName = "cache"
+	DingName    = "ding"
+	CacheName   = "cache"
+	QrcodeName  = "qr_code"
 )
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
 	{CacheName},
-  {DingName},
+	{DingName},
 	{Oauth2Name},
 	{SessionName},
 	{SmsName},
 	{MailName},
+	{QrcodeName},
 }
 
 type invokerAttr struct {
