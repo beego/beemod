@@ -58,7 +58,7 @@ func (c *descriptor) InitCfg(cfg []byte, cfgType string) error {
 			return err
 		}
 		// we need assign the default config, so we should unmarshal twice
-		for name, _ := range c.cfg {
+		for name := range c.cfg {
 			config := DefaultInvokerCfg
 			if err := viper.UnmarshalKey(c.Key+"."+name, &config); err != nil {
 				return err

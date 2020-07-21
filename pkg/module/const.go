@@ -8,15 +8,15 @@ const (
 	Oauth2Name  = "oauth2"
 	SmsName     = "sms"
 	MailName    = "mail"
-  DingName    = "ding"
-  CacheName = "cache"
+	DingName    = "ding"
+	CacheName   = "cache"
 )
 
 // order invokers
 var OrderInvokers = []invokerAttr{
 	{OssName},
 	{CacheName},
-  {DingName},
+	{DingName},
 	{Oauth2Name},
 	{SessionName},
 	{SmsName},

@@ -7,13 +7,13 @@ package ding
 	mode  = "file"
 */
 type InvokerCfg struct {
-	Debug           bool
-	Mode            string
-	WebhookUrl      string
+	Debug      bool
+	Mode       string
+	WebhookUrl string
 }
 
 var DefaultInvokerCfg = InvokerCfg{
-	Debug:           false,
-	Mode:            "keyword",
-	WebhookUrl:       "",
+	Debug:      false,
+	Mode:       "keyword",
+	WebhookUrl: "",
 }
