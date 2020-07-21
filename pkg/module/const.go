@@ -10,6 +10,8 @@ const (
 	MailName    = "mail"
 	DingName    = "ding"
 	CacheName   = "cache"
+	QrcodeName  = "qr_code"
+
 )
 
 // order invokers
@@ -21,6 +23,7 @@ var OrderInvokers = []invokerAttr{
 	{SessionName},
 	{SmsName},
 	{MailName},
+	{QrcodeName},
 }
 
 type invokerAttr struct {
