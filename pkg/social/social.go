@@ -17,6 +17,7 @@ type BasicTokenInfo struct {
 }
 
 type SocialService interface {
+	LoginPage(state string) string
 	GetAccessToken(code string) (*BasicTokenInfo, error)
 	GetUserInfo(accessToken string) (*BasicUserInfo, error)
 	GetType() string
@@ -102,9 +103,9 @@ func (c *descriptor) IsDisabled() bool {
 
 func provider(cfg InvokerCfg) (client SocialService, err error) {
 	if cfg.Mode == "wx" {
-		client = NewWxOauth2Service(cfg.AppID, cfg.AppSecret)
+		client = NewWxOauth2Service(cfg.AppID, cfg.AppSecret, cfg.RedirectURI)
 	} else if cfg.Mode == "github" {
-		client = NewGithubOauth2Service(cfg.AppID, cfg.AppSecret)
+		client = NewGithubOauth2Service(cfg.AppID, cfg.AppSecret, cfg.RedirectURI)
 	} else if cfg.Mode == "qq" {
 		client = NewQQauth2Service(cfg.AppID, cfg.AppSecret, cfg.RedirectURI)
 	} else {

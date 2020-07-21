@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/beego-dev/beemod"
 	"github.com/beego-dev/beemod/pkg/ding"
-  "fmt"
 )
 
 var config = `
@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		panic("register err:" + err.Error())
 	}
-  httpClient := ding.Invoker("myding")
-  res, _ := httpClient.SendMsg("TESTa")
-  fmt.Println(res)
+	httpClient := ding.Invoker("myding")
+	res, _ := httpClient.SendMsg("TESTa")
+	fmt.Println(res)
 }

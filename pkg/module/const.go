@@ -11,6 +11,7 @@ const (
 	DingName    = "ding"
 	CacheName   = "cache"
 	QrcodeName  = "qr_code"
+
 )
 
 // order invokers
