@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/oss"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/oss"
 )
 
 var config = `

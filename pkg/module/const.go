@@ -10,8 +10,7 @@ const (
 	MailName    = "mail"
 	DingName    = "ding"
 	CacheName   = "cache"
-	QrcodeName  = "qr_code"
-
+	QrcodeName  = "qrcode"
 )
 
 // order invokers

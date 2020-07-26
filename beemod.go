@@ -5,20 +5,19 @@ import (
 	"errors"
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"github.com/beego-dev/beemod/pkg/module"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"github.com/spf13/viper"
+	"gopkg.in/ini.v1"
 	"os"
-	"path/filepath"
 )
 
 type BeeMod struct {
 	invokers    []module.Invoker
-	cfgByte     []byte
 	cfgType     string
 	isSetConfig bool
-	filePath    string
-	ext         string
 	err         error
+	ds          datasource.Datasource
 }
 
 var (
@@ -44,44 +43,75 @@ func Register(invokerFuncs ...module.InvokerFunc) (obj *BeeMod) {
 	return
 }
 
-// 设置配置
+// Set Config
 func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 	if m.err != nil {
 		return m
 	}
-	var err error
-	var cfgByte []byte
+	module.Config = &module.ConfigStore{}
 	switch cfgInfo := cfg.(type) {
 	case string:
-		m.filePath = cfgInfo
-		err = isPathExist(m.filePath)
-		if err != nil {
-			m.err = err
-			return m
-		}
-
-		ext := filepath.Ext(m.filePath)
-
-		if len(ext) <= 1 {
-			m.err = errors.New("config file ext is error")
-			return m
-		}
-		m.ext = ext[1:]
-		cfgByte, err = parseFile(cfgInfo)
-		if err != nil {
-			m.err = err
-			return m
+		if cfgType == "ini" {
+			f, err := ini.Load(cfgInfo)
+			if err != nil {
+				m.err = err
+				return m
+			}
+			m.ds = &datasource.Ini{
+				f,
+			}
+		} else {
+			viper.SetConfigFile(cfgInfo)
+			if cfgType != "" {
+				viper.SetConfigType(cfgType)
+			}
+			viper.AutomaticEnv() // read in environment variables that match
+			err := viper.ReadInConfig()
+			if err != nil {
+				logs.Critical("Using config file:", viper.ConfigFileUsed())
+				m.err = err
+				return m
+			}
+			m.ds = &datasource.Toml{
+				viper.GetViper(),
+			}
 		}
 	case []byte:
-		cfgByte = cfgInfo
+		if cfgType == "ini" {
+			f, err := ini.Load(cfgInfo)
+			if err != nil {
+				m.err = err
+				return m
+			}
+			m.ds = &datasource.Ini{
+				f,
+			}
+		} else {
+			rBytes := bytes.NewReader(cfgInfo)
+			if cfgType != "" {
+				viper.SetConfigType(cfgType)
+			}
+			viper.AutomaticEnv() // read in environment variables that match
+			err := viper.ReadConfig(rBytes)
+			if err != nil {
+				logs.Critical("Using config file:", viper.ConfigFileUsed())
+				m.err = err
+				return m
+			}
+			viper.Debug()
+			m.ds = &datasource.Toml{
+				viper.GetViper(),
+			}
+		}
 	default:
 		m.err = fmt.Errorf("type is error %s", cfg)
 		return m
 	}
 	m.cfgType = cfgType
-	m.cfgByte = cfgByte
 	m.isSetConfig = true
-	m.initViper()
+	if BEEMOD_DEBUG {
+		viper.Debug()
+	}
 	return m
 }
 
@@ -98,7 +128,7 @@ func (m *BeeMod) Run() (err error) {
 	for _, invoker := range m.invokers {
 		name := getCallerName(invoker)
 		logs.Info("module", name, "cfg start")
-		if err = invoker.InitCfg(m.cfgByte, m.cfgType); err != nil {
+		if err = invoker.InitCfg(m.ds); err != nil {
 			logs.Info("module", name, "init config error")
 			return
 		}
@@ -120,29 +150,4 @@ func (m *BeeMod) Run() (err error) {
 	}
 
 	return
-}
-
-func (m *BeeMod) initViper() {
-	rBytes := bytes.NewReader(m.cfgByte)
-	cfgType := m.ext
-	if m.cfgType != "" {
-		cfgType = m.cfgType
-	}
-	viper.SetConfigType(cfgType)
-	viper.AutomaticEnv() // read in environment variables that match
-	err := viper.ReadConfig(rBytes)
-	if err != nil {
-		logs.Critical("Using config file:", viper.ConfigFileUsed())
-	}
-	if BEEMOD_DEBUG {
-		viper.Debug()
-	}
-}
-
-func isPathExist(path string) error {
-	_, err := os.Stat(path)
-	if err == nil {
-		return nil
-	}
-	return err
 }

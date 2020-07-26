@@ -6,11 +6,11 @@ package sms
 
 import (
 	"errors"
-	"github.com/beego-dev/beemod/pkg/module"
-	"github.com/beego-dev/beemod/pkg/sms/alibaba"
-	"github.com/beego-dev/beemod/pkg/sms/standard"
-	"github.com/beego-dev/beemod/pkg/sms/tencent"
-	"github.com/spf13/viper"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
+	"github.com/beego/beemod/pkg/sms/alibaba"
+	"github.com/beego/beemod/pkg/sms/standard"
+	"github.com/beego/beemod/pkg/sms/tencent"
 	"sync"
 )
 
@@ -50,27 +50,18 @@ func (c *descriptor) Build() module.Invoker {
 	return c
 }
 
-func (c *descriptor) InitCfg(cfg []byte, cfgType string) error {
-	// todo ini cant unmarshal
-	switch cfgType {
-	case "toml":
-		if err := viper.UnmarshalKey(c.Key, &c.cfg); err != nil {
-			return err
+func (c *descriptor) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]InvokerCfg, 0)
+	ds.Range(c.Key, func(key string, name string) bool {
+		config := DefaultInvokerCfg
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
 		}
-		// we need assign the default config, so we should unmarshal twice
-		for name := range c.cfg {
-			config := DefaultInvokerCfg
-			if err := viper.UnmarshalKey(c.Key+"."+name, &config); err != nil {
-				return err
-			}
-			c.cfg[name] = config
-		}
-	case "ini":
-		panic("not implement ini")
-	}
+		c.cfg[name] = config
+		return true
+	})
 	return nil
 }
-
 func (c *descriptor) Run() error {
 	for name, cfg := range c.cfg {
 		client, err := provider(cfg)

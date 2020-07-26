@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/ding"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/ding"
 )
 
 var config = `

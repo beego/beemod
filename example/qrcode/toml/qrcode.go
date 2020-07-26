@@ -5,8 +5,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/qr_code"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/qr_code"
 )
 
 var qrConfig = `

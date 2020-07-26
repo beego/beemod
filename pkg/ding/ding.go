@@ -3,7 +3,8 @@ package ding
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/beego-dev/beemod/pkg/module"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
@@ -46,7 +47,7 @@ func (c *descriptor) Build() module.Invoker {
 	return c
 }
 
-func (c *descriptor) InitCfg(cfg []byte, cfgType string) error {
+func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	// todo ini cant unmarshal
 	switch cfgType {
 	case "toml":

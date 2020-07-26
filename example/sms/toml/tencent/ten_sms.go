@@ -6,8 +6,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/sms"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/sms"
 )
 
 // custom config toml template
