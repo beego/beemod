@@ -2,7 +2,7 @@ package file
 
 import (
 	"errors"
-	"github.com/beego-dev/beemod/pkg/oss/standard"
+	"github.com/beego/beemod/pkg/oss/standard"
 	"io"
 	"io/ioutil"
 	"os"

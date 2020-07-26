@@ -5,7 +5,7 @@ package alibaba
 
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
-	"github.com/beego-dev/beemod/pkg/sms/standard"
+	"github.com/beego/beemod/pkg/sms/standard"
 )
 
 // AliYun SDK

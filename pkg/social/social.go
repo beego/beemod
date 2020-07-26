@@ -2,7 +2,7 @@ package social
 
 import (
 	"errors"
-	"github.com/beego-dev/beemod/pkg/module"
+	"github.com/beego/beemod/pkg/module"
 	"github.com/spf13/viper"
 	"sync"
 )

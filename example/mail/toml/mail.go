@@ -6,8 +6,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/mail"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/mail"
 	"gopkg.in/gomail.v2"
 )
 

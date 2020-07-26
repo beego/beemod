@@ -1,6 +1,14 @@
 package module
 
-import "context"
+import (
+	"context"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/spf13/viper"
+	"gopkg.in/ini.v1"
+)
+
+// global config
+var Config *ConfigStore
 
 // Descriptor
 type Descriptor struct {
@@ -11,7 +19,7 @@ type Descriptor struct {
 // Invoker
 type Invoker interface {
 	// Init cfg returns parse cfg error.
-	InitCfg(cfg []byte, cfgType string) error
+	InitCfg(ds datasource.Datasource) error
 	// Init Caller returns init caller error
 	Run() error
 }
@@ -32,3 +40,8 @@ func IsDisabled(invoker Invoker) bool {
 }
 
 type InvokerFunc func() Invoker
+
+type ConfigStore struct {
+	Ini   *ini.File
+	Viper *viper.Viper
+}
