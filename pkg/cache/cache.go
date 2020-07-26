@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	cache2 "github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/redis"
-	"github.com/beego-dev/beemod/pkg/cache/standard"
-	"github.com/beego-dev/beemod/pkg/module"
-	"github.com/spf13/viper"
+	"github.com/beego/beemod/pkg/cache/standard"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"sync"
 )
 
@@ -19,7 +19,7 @@ type descriptor struct {
 	Name  string
 	Key   string
 	store sync.Map
-	cfg   map[string]interface{}
+	cfg   map[string]InvokerCfg
 }
 
 type Client struct {
@@ -31,40 +31,32 @@ func DefaultBuild() module.Invoker {
 	return defaultInvoker
 }
 
-func (c *descriptor) InitCfg(cfg []byte, cfgType string) error {
-	switch cfgType {
-	case "toml":
-		if err := viper.UnmarshalKey(c.Key, &c.cfg); err != nil {
-			return err
+func (c *descriptor) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]InvokerCfg, 0)
+	ds.Range(c.Key, func(key string, name string) bool {
+		config := DefaultInvokerCfg
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
 		}
-		for name, v := range c.cfg {
-			//parse to json str
-			config, err := json.Marshal(v)
-			if err != nil {
-				return err
-			}
-			c.cfg[name] = string(config)
-		}
-	case "ini":
-		panic("not implement ini")
-	case "json":
-
-	}
+		c.cfg[name] = config
+		return true
+	})
 	return nil
 }
 
 func (c *descriptor) Run() error {
 	for name, cfg := range c.cfg {
-		cache, err := cache2.NewCache(name, cfg.(string))
+		jsonbyte, err := json.Marshal(cfg)
+		if err != nil {
+			panic(err)
+		}
+		cache, err := cache2.NewCache(name, string(jsonbyte))
 		if err != nil {
 			panic(err.Error())
 		}
 		c := &Client{
 			cache,
-			InvokerCfg{
-				AdapterName: name,
-				ConfigJson:  cfg.(string),
-			},
+			cfg,
 		}
 		defaultInvoker.store.Store(name, c)
 	}
