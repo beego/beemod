@@ -1,13 +1,10 @@
 package logger
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"github.com/astaxie/beego/logs"
 	"github.com/beego-dev/beemod/pkg/common"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"log"
 	"sync"
 )
 
@@ -23,7 +20,7 @@ type callerStore struct {
 }
 
 type Client struct {
-	*zap.Logger
+	*logs.BeeLogger
 }
 
 func Register() common.Caller {
@@ -77,33 +74,12 @@ func (c *callerStore) InitCaller() error {
 }
 
 func Provider(cfg CallerCfg) (db *Client) {
-	var js string
-	if cfg.Debug {
-		js = fmt.Sprintf(`{
-      "level": "%s",
-      "encoding": "json",
-      "outputPaths": ["stdout"],
-      "errorOutputPaths": ["stdout"]
-      }`, cfg.Level)
-	} else {
-		js = fmt.Sprintf(`{
-      "level": "%s",
-      "encoding": "json",
-      "outputPaths": ["%s"],
-      "errorOutputPaths": ["%s"]
-      }`, cfg.Level, cfg.Path, cfg.Path)
-	}
-
-	var zcfg zap.Config
-	if err := json.Unmarshal([]byte(js), &zcfg); err != nil {
-		panic(err)
-	}
-	zcfg.EncoderConfig = zap.NewProductionEncoderConfig()
-	zcfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	var err error
-	l, err := zcfg.Build()
+	log := logs.NewLogger()
+	err := log.SetLogger(logs.AdapterFile, fmt.Sprintf(`{"filename":"%s","color":true,"level":%v}`, cfg.Path, cfg.Level))
 	if err != nil {
-		log.Fatal("init logger error: ", err)
+		log.Error(err.Error())
 	}
-	return &Client{l}
+	logs.EnableFuncCallDepth(true)
+
+	return &Client{log}
 }

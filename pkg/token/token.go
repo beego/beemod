@@ -3,7 +3,7 @@ package token
 import (
 	"errors"
 	"github.com/BurntSushi/toml"
-	"github.com/jinzhu/gorm"
+	"github.com/astaxie/beego/orm"
 	"sync"
 
 	mysqlToken "github.com/beego-dev/beemod/pkg/token/mysql"
@@ -38,10 +38,11 @@ func Register() common.Caller {
 func Caller(name string) *Client {
 	obj, ok := defaultCallerStore.caller.Load(name)
 
-	mysqlToken.InitTableName(obj.(*Client).cfg.MysqlTableName)
 	redis2.InitTokenKeyPattern(obj.(*Client).cfg.RedisTokenKeyPattern)
 	standard.InitAccessToken(obj.(*Client).cfg.AccessTokenIss, obj.(*Client).cfg.AccessTokenKey)
 	standard.InitAccessTokenExpireInterval(obj.(*Client).cfg.AccessTokenExpireInterval)
+
+	_ = orm.RunSyncdb(obj.(*Client).cfg.Mysql.AliasName, false, false)
 
 	if !ok {
 		return nil
@@ -90,7 +91,7 @@ func provider(cfg CallerCfg) (client standard.TokenAccessor, err error) {
 }
 
 func createMysqlAccessor(cfg CallerCfg, loggerClient *logger.Client) (accessor standard.TokenAccessor, err error) {
-	var db *gorm.DB
+	var db orm.Ormer
 	if len(cfg.MysqlRef) > 0 {
 		db = mysql.Caller(cfg.MysqlRef)
 	} else {

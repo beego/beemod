@@ -9,30 +9,38 @@ import (
 func main() {
 	var err error
 	config := `
-
-
 [muses.token.default]
-	mode = "redis"
-	mysqlTableName  = "access_token"
+	mode = "mysql"
 	redisTokenKeyPattern = "/egoshop/token/%d"
 	accessTokenExpireInterval = 604800
 	accessTokenIss           = "github.com/goecology/egoshop"
 	accessTokenKey           = "ecologysK#xo"
 
 
-[muses.token.default.redis]
-	mode = "redis"
+[muses.token.default.mysql]
     debug = true
-    addr = "127.0.0.1:6379"
+    level = "panic"
     network = "tcp"
-    db = 0
-    password = ""
-[muses.token.default.Logger]
-	debug = true
-    level = "debug"
-    path = "./token.log"
-`
+    dialect = "mysql"
+    addr = "127.0.0.1:3306"
+    username = "root"
+    password = "root"
+    db = "beetest"
+    charset = "utf8"
+    parseTime = "True"
+    loc = "Local"
+    timeout = "1s"
+    readTimeout = "1s"
+    writeTimeout = "1s"
+    maxOpenConns = 30
+    maxIdleConns = 10
+    connMaxLifetime = "300s"
+	aliasName="default"
 
+[muses.token.default.Logger]
+    level = 7
+    path = "token.log"
+`
 	store := token.Register()
 	err = store.InitCfg([]byte(config))
 	if err != nil {
@@ -51,7 +59,9 @@ func main() {
 		panic("CreateAccessToken err:" + err.Error())
 	}
 
-	fmt.Println(Client.DecodeAccessToken(accessToken.AccessToken))
-
 	fmt.Println(accessToken)
+
+	fmt.Println(Client.CheckAccessToken(accessToken.AccessToken))
+
+	fmt.Println(Client.DecodeAccessToken(accessToken.AccessToken))
 }

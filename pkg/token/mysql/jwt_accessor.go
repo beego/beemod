@@ -1,10 +1,10 @@
 package mysql
 
 import (
+	"fmt"
+	"github.com/astaxie/beego/orm"
 	"github.com/beego-dev/beemod/pkg/logger"
 	"github.com/beego-dev/beemod/pkg/token/standard"
-	"github.com/jinzhu/gorm"
-	"go.uber.org/zap"
 	"time"
 )
 
@@ -20,10 +20,10 @@ import (
 type mysqlTokenAccessor struct {
 	standard.JwtTokenAccessor
 	logger *logger.Client
-	db     *gorm.DB
+	db     orm.Ormer
 }
 
-func InitTokenAccessor(logger *logger.Client, db *gorm.DB) standard.TokenAccessor {
+func InitTokenAccessor(logger *logger.Client, db orm.Ormer) standard.TokenAccessor {
 	return &mysqlTokenAccessor{
 		JwtTokenAccessor: standard.JwtTokenAccessor{},
 		logger:           logger,
@@ -33,7 +33,6 @@ func InitTokenAccessor(logger *logger.Client, db *gorm.DB) standard.TokenAccesso
 
 func (accessor *mysqlTokenAccessor) CreateAccessToken(uid int, startTime int64) (resp standard.AccessTokenTicket, err error) {
 	AccessTokenData := &AccessToken{
-		Jti:        0,
 		Sub:        uid,
 		IaTime:     startTime,
 		ExpTime:    startTime + standard.AccessTokenExpireInterval,
@@ -43,9 +42,20 @@ func (accessor *mysqlTokenAccessor) CreateAccessToken(uid int, startTime int64) 
 		IsInvalid:  0,
 		LogoutTime: 0,
 	}
-	if err = accessor.db.Create(AccessTokenData).Error; err != nil {
-		accessor.logger.Error("create accessToken create error", zap.Error(err))
-		return
+	qs := accessor.db.QueryTable("access_token")
+	accessToken := AccessToken{}
+	if err = qs.Filter("sub__exact", uid).One(&accessToken); err != nil {
+		if _, err = accessor.db.Insert(AccessTokenData); err != nil {
+			accessor.logger.Error("create accessToken create error", err.Error())
+			return
+		}
+	} else {
+		AccessTokenData.Jti = accessToken.Jti
+		fmt.Println(AccessTokenData)
+		if _, err = accessor.db.Update(AccessTokenData); err != nil {
+			accessor.logger.Error("Update accessToken create error", err.Error())
+			return
+		}
 	}
 
 	tokenString, err := accessor.EncodeAccessToken(AccessTokenData.Jti, uid, startTime)
@@ -60,12 +70,20 @@ func (accessor *mysqlTokenAccessor) CreateAccessToken(uid int, startTime int64) 
 func (accessor *mysqlTokenAccessor) CheckAccessToken(tokenStr string) bool {
 	sc, err := accessor.DecodeAccessToken(tokenStr)
 	if err != nil {
-		accessor.logger.Error("access_token CheckAccessToken error1", zap.String("err", err.Error()))
+		accessor.logger.Error("access_token CheckAccessToken error1", err.Error())
 		return false
 	}
 	var resp AccessToken
-	if err = accessor.db.Table(TableName).Where("`jti`=? AND `sub`=? AND `exp_time`>=? AND `is_invalid`=? AND `is_logout`=?", sc["jti"], sc["sub"], sc["exp"], 0, 0).Find(&resp).Error; err != nil {
-		accessor.logger.Error("access_token CheckAccessToken error2", zap.String("err", err.Error()))
+	qs := accessor.db.QueryTable("access_token")
+	if err = qs.
+		Filter("jti__exact", sc["jti"]).
+		Filter("sub__exact", sc["sub"]).
+		Filter("exp_time__gte", sc["exp"]).
+		Filter("is_invalid__exact", 0).
+		Filter("is_logout__exact", 0).
+		One(&resp);
+		err != nil {
+		accessor.logger.Error("access_token CheckAccessToken error2", err.Error())
 		return false
 	}
 	return true
@@ -74,7 +92,7 @@ func (accessor *mysqlTokenAccessor) CheckAccessToken(tokenStr string) bool {
 func (accessor *mysqlTokenAccessor) RefreshAccessToken(tokenStr string, startTime int64) (resp standard.AccessTokenTicket, err error) {
 	sc, err := accessor.DecodeAccessToken(tokenStr)
 	if err != nil {
-		accessor.logger.Error("access_token CheckAccessToken error1", zap.String("err", err.Error()))
+		accessor.logger.Error("access_token CheckAccessToken error1", err.Error())
 		return
 	}
 
@@ -84,10 +102,10 @@ func (accessor *mysqlTokenAccessor) RefreshAccessToken(tokenStr string, startTim
 	if err != nil {
 		return
 	}
-
-	err = accessor.db.Table(TableName).Where("`jti`=?", jti).Updates(map[string]interface{}{
+	qs := accessor.db.QueryTable("access_token")
+	_, err = qs.Filter("jti__exact", jti).Update(map[string]interface{}{
 		"exp_time": startTime + standard.AccessTokenExpireInterval,
-	}).Error
+	})
 
 	if err != nil {
 		return

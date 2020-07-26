@@ -7,7 +7,6 @@ type Cfg struct {
 }
 
 type CallerCfg struct {
-	Debug bool
-	Level string
+	Level int
 	Path  string
 }

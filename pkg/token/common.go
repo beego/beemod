@@ -24,7 +24,6 @@ type LoggerCallerCfg logger.CallerCfg
 type CallerCfg struct {
 	Mode string
 
-	MysqlTableName            string `toml:"mysqlTableName"`
 	RedisTokenKeyPattern      string `toml:"redisTokenKeyPattern"`
 	AccessTokenExpireInterval int64  `toml:"accessTokenExpireInterval"`
 	AccessTokenIss            string `toml:"accessTokenIss"`
