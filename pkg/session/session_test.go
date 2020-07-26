@@ -1,7 +1,7 @@
 package session
 
 import (
-	"github.com/beego-dev/beemod"
+	"github.com/beego/beemod"
 	"net/http"
 	"net/http/httptest"
 	"strings"

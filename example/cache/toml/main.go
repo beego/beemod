@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/astaxie/beego/logs"
-	"github.com/beego-dev/beemod"
-	"github.com/beego-dev/beemod/pkg/cache"
+	"github.com/beego/beemod"
+	"github.com/beego/beemod/pkg/cache"
 	"time"
 )
 

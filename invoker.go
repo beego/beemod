@@ -1,20 +1,9 @@
 package beemod
 
 import (
-	"github.com/beego-dev/beemod/pkg/module"
-	"io/ioutil"
+	"github.com/beego/beemod/pkg/module"
 	"reflect"
 )
-
-// Container from file.
-func parseFile(path string) ([]byte, error) {
-	// read file to []byte
-	b, err := ioutil.ReadFile(path)
-	if err != nil {
-		return b, err
-	}
-	return b, nil
-}
 
 func sortInvokers(invokers []module.InvokerFunc) (invokerSort []module.Invoker, err error) {
 	invokerMap := make(map[string]module.Invoker)

@@ -2,7 +2,7 @@ package alioss
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/beego-dev/beemod/pkg/oss/standard"
+	"github.com/beego/beemod/pkg/oss/standard"
 	"io"
 	"io/ioutil"
 	"os"

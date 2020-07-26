@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/beego-dev/beemod"
-	modSession "github.com/beego-dev/beemod/pkg/session"
+	"github.com/beego/beemod"
+	modSession "github.com/beego/beemod/pkg/session"
 	"log"
 	"net/http"
 	"net/http/httptest"

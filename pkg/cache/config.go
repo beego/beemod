@@ -1,6 +1,13 @@
 package cache
 
 type InvokerCfg struct {
-	AdapterName string
-	ConfigJson  string
+	Key      string `ini:"key"json:"key"`
+	Conn     string `ini:"conn"json:"conn"`
+	Password string `ini:"password"json:"password"`
+}
+
+var DefaultInvokerCfg = InvokerCfg{
+	Key:      "",
+	Conn:     "",
+	Password: "",
 }

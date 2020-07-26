@@ -4,7 +4,7 @@
 package tencent
 
 import (
-	"github.com/beego-dev/beemod/pkg/sms/standard"
+	"github.com/beego/beemod/pkg/sms/standard"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20190711" //import sms

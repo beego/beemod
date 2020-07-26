@@ -7,15 +7,15 @@ package oss
 	mode  = "file"
 */
 type InvokerCfg struct {
-	Debug           bool
-	Mode            string
-	Addr            string
-	AccessKeyID     string
-	AccessKeySecret string
-	CdnName         string
-	OssBucket       string
-	FileBucket      string
-	IsDeleteSrcPath bool
+	Debug           bool   `ini:"debug"`
+	Mode            string `ini:"mode"`
+	Addr            string `ini:"addr"`
+	AccessKeyID     string `ini:"accessKeyId"`
+	AccessKeySecret string `ini:"accessKeySecret"`
+	CdnName         string `ini:"cdnName"`
+	OssBucket       string `ini:"ossBucket"`
+	FileBucket      string `ini:"fileBucket"`
+	IsDeleteSrcPath bool   `ini:"isDeleteSrcPath"`
 }
 
 var DefaultInvokerCfg = InvokerCfg{
@@ -26,6 +26,6 @@ var DefaultInvokerCfg = InvokerCfg{
 	AccessKeySecret: "",
 	CdnName:         "",
 	OssBucket:       "",
-	FileBucket:      "",
+	FileBucket:      ".",
 	IsDeleteSrcPath: false,
 }
