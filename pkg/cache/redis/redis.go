@@ -9,7 +9,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gomodule/redigo/redis"
 
-	"github.com/beego-dev/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/common"
 )
 
 var defaultCaller = &callerStore{

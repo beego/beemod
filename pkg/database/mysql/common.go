@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"github.com/beego-dev/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/common"
 )
 
 type Cfg struct {

@@ -3,8 +3,8 @@ package mysql
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/beego-dev/beemod/pkg/logger"
-	"github.com/beego-dev/beemod/pkg/token/standard"
+	"github.com/beego/beemod/pkg/logger"
+	"github.com/beego/beemod/pkg/token/standard"
 	"time"
 )
 

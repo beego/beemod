@@ -3,7 +3,7 @@ package mysql
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/astaxie/beego/orm"
-	"github.com/beego-dev/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/common"
 	_ "github.com/go-sql-driver/mysql"
 	"sync"
 )

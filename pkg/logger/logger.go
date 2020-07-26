@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/astaxie/beego/logs"
-	"github.com/beego-dev/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/common"
 	"sync"
 )
 

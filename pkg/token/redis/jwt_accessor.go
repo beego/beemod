@@ -2,9 +2,9 @@ package redis
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod/pkg/cache/redis"
-	"github.com/beego-dev/beemod/pkg/logger"
-	"github.com/beego-dev/beemod/pkg/token/standard"
+	"github.com/beego/beemod/pkg/cache/redis"
+	"github.com/beego/beemod/pkg/logger"
+	"github.com/beego/beemod/pkg/token/standard"
 )
 
 var tokenKeyPattern string

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/beego-dev/beemod/pkg/token"
+	"github.com/beego/beemod/pkg/token"
 	"time"
 )
 

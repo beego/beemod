@@ -6,14 +6,14 @@ import (
 	"github.com/astaxie/beego/orm"
 	"sync"
 
-	mysqlToken "github.com/beego-dev/beemod/pkg/token/mysql"
-	redis2 "github.com/beego-dev/beemod/pkg/token/redis"
-	"github.com/beego-dev/beemod/pkg/token/standard"
+	mysqlToken "github.com/beego/beemod/pkg/token/mysql"
+	redis2 "github.com/beego/beemod/pkg/token/redis"
+	"github.com/beego/beemod/pkg/token/standard"
 
-	"github.com/beego-dev/beemod/pkg/cache/redis"
-	"github.com/beego-dev/beemod/pkg/common"
-	"github.com/beego-dev/beemod/pkg/database/mysql"
-	"github.com/beego-dev/beemod/pkg/logger"
+	"github.com/beego/beemod/pkg/cache/redis"
+	"github.com/beego/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/database/mysql"
+	"github.com/beego/beemod/pkg/logger"
 )
 
 var defaultCallerStore = &callerStore{

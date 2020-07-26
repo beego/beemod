@@ -1,9 +1,9 @@
 package token
 
 import (
-	"github.com/beego-dev/beemod/pkg/cache/redis"
-	"github.com/beego-dev/beemod/pkg/database/mysql"
-	"github.com/beego-dev/beemod/pkg/logger"
+	"github.com/beego/beemod/pkg/cache/redis"
+	"github.com/beego/beemod/pkg/database/mysql"
+	"github.com/beego/beemod/pkg/logger"
 )
 
 type Cfg struct {
