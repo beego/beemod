@@ -16,7 +16,7 @@ type Descriptor struct {
 	Invoker Invoker
 }
 
-// Invoker
+// InvokerRegister
 type Invoker interface {
 	// Init cfg returns parse cfg error.
 	InitCfg(ds datasource.Datasource) error

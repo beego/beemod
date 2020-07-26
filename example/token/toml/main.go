@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/beego/beemod"
 	"github.com/beego/beemod/pkg/token"
 	"time"
 )
@@ -9,15 +10,13 @@ import (
 func main() {
 	var err error
 	config := `
-[muses.token.default]
+[beego.token.dev]
 	mode = "mysql"
 	redisTokenKeyPattern = "/egoshop/token/%d"
 	accessTokenExpireInterval = 604800
 	accessTokenIss           = "github.com/goecology/egoshop"
 	accessTokenKey           = "ecologysK#xo"
-
-
-[muses.token.default.mysql]
+[beego.token.dev.mysql]
     debug = true
     level = "panic"
     network = "tcp"
@@ -29,30 +28,23 @@ func main() {
     charset = "utf8"
     parseTime = "True"
     loc = "Local"
-    timeout = "1s"
-    readTimeout = "1s"
-    writeTimeout = "1s"
     maxOpenConns = 30
     maxIdleConns = 10
     connMaxLifetime = "300s"
 	aliasName="default"
-
-[muses.token.default.Logger]
+[beego.token.dev.Logger]
     level = 7
     path = "token.log"
 `
-	store := token.Register()
-	err = store.InitCfg([]byte(config))
+	err = beemod.Register(
+		token.DefaultBuild,
+	).SetCfg([]byte(config), "toml").Run()
+
 	if err != nil {
-		panic("InitCfg err:" + err.Error())
+		panic("register err:" + err.Error())
 	}
 
-	err = store.InitCaller()
-	if err != nil {
-		panic("InitCfg err:" + err.Error())
-	}
-
-	Client := token.Caller("default")
+	Client := token.Invoker("dev")
 
 	accessToken, err := Client.CreateAccessToken(123123, time.Now().Unix())
 	if err != nil {

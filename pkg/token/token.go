@@ -2,8 +2,10 @@ package token
 
 import (
 	"errors"
-	"github.com/BurntSushi/toml"
+	"fmt"
 	"github.com/astaxie/beego/orm"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"sync"
 
 	mysqlToken "github.com/beego/beemod/pkg/token/mysql"
@@ -18,24 +20,58 @@ import (
 
 var defaultCallerStore = &callerStore{
 	Name: common.ModTokenName,
+	Key:  module.ConfigPrefix + module.TokenName,
 }
 
 type callerStore struct {
 	Name   string
 	caller sync.Map
-	cfg    Cfg
+	Key    string
+	cfg    map[string]InvokerCfg
 }
 
 type Client struct {
 	standard.TokenAccessor
-	cfg CallerCfg
+	cfg InvokerCfg
 }
 
-func Register() common.Caller {
+// default invoker build
+func DefaultBuild() module.Invoker {
 	return defaultCallerStore
 }
 
-func Caller(name string) *Client {
+func (c *callerStore) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]InvokerCfg, 0)
+	var config InvokerCfg
+	ds.Range(c.Key, func(key string, name string) bool {
+		if err := ds.Unmarshal(key, &config); err != nil {
+			fmt.Println(key, config)
+			fmt.Println(err.Error())
+			return false
+		}
+		c.cfg[name] = config
+		return true
+	})
+	return nil
+}
+
+func (c *callerStore) Run() error {
+	for name, cfg := range c.cfg {
+		accessor, err := provider(cfg)
+		if err != nil {
+			return err
+		}
+		c := &Client{
+			accessor,
+			cfg,
+		}
+		defaultCallerStore.caller.Store(name, c)
+	}
+
+	return nil
+}
+
+func Invoker(name string) *Client {
 	obj, ok := defaultCallerStore.caller.Load(name)
 
 	redis2.InitTokenKeyPattern(obj.(*Client).cfg.RedisTokenKeyPattern)
@@ -50,29 +86,7 @@ func Caller(name string) *Client {
 	return obj.(*Client)
 }
 
-func (c *callerStore) InitCfg(cfg []byte) error {
-	if err := toml.Unmarshal(cfg, &c.cfg); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *callerStore) InitCaller() error {
-	for name, cfg := range c.cfg.Muses.Token {
-		accessor, err := provider(cfg)
-		if err != nil {
-			return err
-		}
-		c := &Client{
-			accessor,
-			cfg,
-		}
-		defaultCallerStore.caller.Store(name, c)
-	}
-	return nil
-}
-
-func provider(cfg CallerCfg) (client standard.TokenAccessor, err error) {
+func provider(cfg InvokerCfg) (client standard.TokenAccessor, err error) {
 	var loggerClient *logger.Client
 
 	// 如果没有引用的logger，就创建一个
@@ -90,7 +104,7 @@ func provider(cfg CallerCfg) (client standard.TokenAccessor, err error) {
 	}
 }
 
-func createMysqlAccessor(cfg CallerCfg, loggerClient *logger.Client) (accessor standard.TokenAccessor, err error) {
+func createMysqlAccessor(cfg InvokerCfg, loggerClient *logger.Client) (accessor standard.TokenAccessor, err error) {
 	var db orm.Ormer
 	if len(cfg.MysqlRef) > 0 {
 		db = mysql.Caller(cfg.MysqlRef)
@@ -103,7 +117,7 @@ func createMysqlAccessor(cfg CallerCfg, loggerClient *logger.Client) (accessor s
 	return mysqlToken.InitTokenAccessor(loggerClient, db), nil
 }
 
-func createRedisAccessor(cfg CallerCfg, loggerClient *logger.Client) (standard.TokenAccessor, error) {
+func createRedisAccessor(cfg InvokerCfg, loggerClient *logger.Client) (standard.TokenAccessor, error) {
 	var redisClient *redis.Client
 	if len(cfg.RedisRef) > 0 {
 		redisClient = redis.Caller(cfg.RedisRef)

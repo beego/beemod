@@ -1,9 +1,5 @@
 package mysql
 
-import (
-	"github.com/beego/beemod/pkg/common"
-)
-
 type Cfg struct {
 	Muses struct {
 		Mysql map[string]CallerCfg `toml:"mysql"`
@@ -23,7 +19,4 @@ type CallerCfg struct {
 	Charset        string
 	ParseTime      string
 	Loc            string
-	Timeout        common.Duration
-	ReadTimeout    common.Duration
-	WriteTimeout   common.Duration
 }

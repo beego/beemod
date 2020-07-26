@@ -51,8 +51,7 @@ func (c *callerStore) InitCaller() error {
 func Provider(cfg CallerCfg) (o orm.Ormer, err error) {
 	err = orm.RegisterDriver("mysql", orm.DRMySQL)
 	err = orm.RegisterDataBase(cfg.AliasName, "mysql", cfg.Username+":"+cfg.Password+"@"+cfg.Network+"("+cfg.Addr+")/"+cfg.Db+
-		"?charset="+cfg.Charset+"&parseTime="+cfg.ParseTime+"&loc="+cfg.Loc+
-		"&timeout="+cfg.Timeout.Duration.String()+"&readTimeout="+cfg.ReadTimeout.Duration.String()+"&writeTimeout="+cfg.WriteTimeout.Duration.String(),
+		"?charset="+cfg.Charset+"&parseTime="+cfg.ParseTime+"&loc="+cfg.Loc,
 		cfg.MaxIdleConns,
 		cfg.MaxOpenConns)
 

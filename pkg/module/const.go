@@ -11,6 +11,7 @@ const (
 	DingName    = "ding"
 	CacheName   = "cache"
 	QrcodeName  = "qrcode"
+	TokenName   = "token"
 )
 
 // order invokers
@@ -23,6 +24,7 @@ var OrderInvokers = []invokerAttr{
 	{SmsName},
 	{MailName},
 	{QrcodeName},
+	{TokenName},
 }
 
 type invokerAttr struct {
