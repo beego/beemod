@@ -2,33 +2,61 @@ package logger
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
 	"github.com/astaxie/beego/logs"
 	"github.com/beego/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"sync"
 )
 
 var defaultCaller = &callerStore{
 	Name: common.ModLoggerName,
+	Key:  module.ConfigPrefix + module.LogName,
 }
 
 type callerStore struct {
 	Name         string
-	IsBackground bool
 	caller       sync.Map
-	cfg          Cfg
+	cfg          map[string]CallerCfg
+	Key          string
 }
 
 type Client struct {
 	*logs.BeeLogger
+	cfg CallerCfg
 }
 
-func Register() common.Caller {
-
+func DefaultBuild() module.Invoker {
 	return defaultCaller
 }
 
-func Caller(name string) *Client {
+func (c *callerStore) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]CallerCfg, 0)
+	var config CallerCfg
+	ds.Range(c.Key, func(key string, name string) bool {
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
+		}
+		c.cfg[name] = config
+		return true
+	})
+	return nil
+}
+
+func (c *callerStore) Run() error {
+	for name, cfg := range c.cfg {
+		log := Provider(cfg)
+		c := &Client{
+			log.BeeLogger,
+			cfg,
+		}
+		defaultCaller.caller.Store(name, c)
+	}
+
+	return nil
+}
+
+func Invoker(name string) *Client {
 	obj, ok := defaultCaller.caller.Load(name)
 	if !ok {
 		return nil
@@ -36,44 +64,7 @@ func Caller(name string) *Client {
 	return obj.(*Client)
 }
 
-// 初始化做了判断，肯定存在默认配置
-func DefaultLogger() *Client {
-	var logClient *Client
-	// 如果设置了系统日志，就返回系统日志
-	obj, ok := defaultCaller.caller.Load(common.SystemLogger)
-	if !ok {
-		// 如果没有系统日志，那么就返回用户设置的第一个日志
-		defaultCaller.caller.Range(func(key, value interface{}) bool {
-			logClient = value.(*Client)
-			return false
-		})
-	} else {
-		logClient = obj.(*Client)
-	}
-
-	// 如果log client 不存在，提示用户配置里需要设置日志配置
-	if logClient == nil {
-		panic("please set logger config")
-	}
-	return logClient
-}
-
-func (c *callerStore) InitCfg(cfg []byte) error {
-	if err := toml.Unmarshal(cfg, &c.cfg); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *callerStore) InitCaller() error {
-	for name, cfg := range c.cfg.Muses.Logger {
-		db := Provider(cfg)
-		defaultCaller.caller.Store(name, db)
-	}
-	return nil
-}
-
-func Provider(cfg CallerCfg) (db *Client) {
+func Provider(cfg CallerCfg) *Client {
 	log := logs.NewLogger()
 	err := log.SetLogger(logs.AdapterFile, fmt.Sprintf(`{"filename":"%s","color":true,"level":%v}`, cfg.Path, cfg.Level))
 	if err != nil {
@@ -81,5 +72,5 @@ func Provider(cfg CallerCfg) (db *Client) {
 	}
 	logs.EnableFuncCallDepth(true)
 
-	return &Client{log}
+	return &Client{log, cfg}
 }

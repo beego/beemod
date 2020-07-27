@@ -2,7 +2,6 @@ package token
 
 import (
 	"errors"
-	"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
@@ -45,8 +44,6 @@ func (c *callerStore) InitCfg(ds datasource.Datasource) error {
 	var config InvokerCfg
 	ds.Range(c.Key, func(key string, name string) bool {
 		if err := ds.Unmarshal(key, &config); err != nil {
-			fmt.Println(key, config)
-			fmt.Println(err.Error())
 			return false
 		}
 		c.cfg[name] = config
@@ -107,7 +104,7 @@ func provider(cfg InvokerCfg) (client standard.TokenAccessor, err error) {
 func createMysqlAccessor(cfg InvokerCfg, loggerClient *logger.Client) (accessor standard.TokenAccessor, err error) {
 	var db orm.Ormer
 	if len(cfg.MysqlRef) > 0 {
-		db = mysql.Caller(cfg.MysqlRef)
+		db = mysql.Invoker(cfg.MysqlRef).O
 	} else {
 		db, err = mysql.Provider(mysql.CallerCfg(cfg.Mysql))
 		if err != nil {

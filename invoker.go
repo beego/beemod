@@ -13,7 +13,6 @@ func sortInvokers(invokers []module.InvokerFunc) (invokerSort []module.Invoker, 
 		name := getCallerName(obj)
 		invokerMap[name] = obj
 	}
-
 	for _, value := range module.OrderInvokers {
 		caller, ok := invokerMap[value.Name]
 		if ok {

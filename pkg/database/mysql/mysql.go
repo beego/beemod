@@ -1,57 +1,78 @@
 package mysql
 
 import (
-	"github.com/BurntSushi/toml"
 	"github.com/astaxie/beego/orm"
 	"github.com/beego/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	_ "github.com/go-sql-driver/mysql"
 	"sync"
 )
 
 var defaultCaller = &callerStore{
 	Name: common.ModMysqlName,
+	Key:  module.ConfigPrefix + module.MysqlName,
 }
 
 type callerStore struct {
 	Name   string
 	caller sync.Map
-	cfg    Cfg
+	cfg    map[string]CallerCfg
+	Key    string
 }
 
-func Register() common.Caller {
+type Client struct {
+	Cfg CallerCfg
+	O   orm.Ormer
+}
+
+// default invoker build
+func DefaultBuild() module.Invoker {
 	return defaultCaller
 }
 
-func Caller(name string) orm.Ormer {
+func Invoker(name string) *Client {
 	obj, ok := defaultCaller.caller.Load(name)
 	if !ok {
 		return nil
 	}
-	return obj.(orm.Ormer)
+	return obj.(*Client)
 }
 
-func (c *callerStore) InitCfg(cfg []byte) error {
-	if err := toml.Unmarshal(cfg, &c.cfg); err != nil {
-		return err
-	}
+func (c *callerStore) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]CallerCfg, 0)
+	var config CallerCfg
+	ds.Range(c.Key, func(key string, name string) bool {
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
+		}
+		c.cfg[name] = config
+		return true
+	})
 	return nil
 }
 
-func (c *callerStore) InitCaller() error {
-	for name, cfg := range c.cfg.Muses.Mysql {
-		db, err := Provider(cfg)
+func (c *callerStore) Run() error {
+	for name, cfg := range c.cfg {
+		o, err := Provider(cfg)
 		if err != nil {
 			return err
 		}
-		defaultCaller.caller.Store(name, db)
+		c := &Client{
+			cfg,
+			o,
+		}
+		defaultCaller.caller.Store(name, c)
 	}
+
 	return nil
 }
 
 func Provider(cfg CallerCfg) (o orm.Ormer, err error) {
 	err = orm.RegisterDriver("mysql", orm.DRMySQL)
-	err = orm.RegisterDataBase(cfg.AliasName, "mysql", cfg.Username+":"+cfg.Password+"@"+cfg.Network+"("+cfg.Addr+")/"+cfg.Db+
-		"?charset="+cfg.Charset+"&parseTime="+cfg.ParseTime+"&loc="+cfg.Loc,
+	err = orm.RegisterDataBase(cfg.AliasName, "mysql",
+		cfg.Username+":"+cfg.Password+"@"+cfg.Network+"("+cfg.Addr+")/"+cfg.Db+
+			"?charset="+cfg.Charset+"&parseTime="+cfg.ParseTime+"&loc="+cfg.Loc,
 		cfg.MaxIdleConns,
 		cfg.MaxOpenConns)
 

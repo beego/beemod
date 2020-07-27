@@ -12,6 +12,8 @@ const (
 	CacheName   = "cache"
 	QrcodeName  = "qrcode"
 	TokenName   = "token"
+	MysqlName   = "mysql"
+	LogName     = "logger"
 )
 
 // order invokers
@@ -25,6 +27,8 @@ var OrderInvokers = []invokerAttr{
 	{MailName},
 	{QrcodeName},
 	{TokenName},
+	{MysqlName},
+	{LogName},
 }
 
 type invokerAttr struct {
