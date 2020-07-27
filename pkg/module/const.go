@@ -10,6 +10,7 @@ const (
 	MailName    = "mail"
 	DingName    = "ding"
 	CacheName   = "cache"
+	RedisName   = "redis"
 	QrcodeName  = "qrcode"
 	TokenName   = "token"
 	MysqlName   = "mysql"
@@ -29,6 +30,7 @@ var OrderInvokers = []invokerAttr{
 	{TokenName},
 	{MysqlName},
 	{LogName},
+	{RedisName},
 }
 
 type invokerAttr struct {

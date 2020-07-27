@@ -6,6 +6,48 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
+type RedisImp interface {
+	Do(commandName string, args ...interface{}) (reply interface{}, err error)
+	Send(commandName string, args ...interface{}) error
+	Flush() error
+	GetString(key string) (string, error)
+	GetInt(key string) (int, error)
+	GetInt64(key string) (int64, error)
+	GetBool(key string) (bool, error)
+	GetObject(key string, val interface{}) error
+	Get(key string) (interface{}, error)
+	Set(key string, val interface{}, expire int) (interface{}, error)
+	Exists(key string) (bool, error)
+	Del(key string) error
+	Ttl(key string) (ttl int64, err error)
+	Expire(key string, expire int) error
+	Incr(key string) (val int64, err error)
+	IncrBy(key string, amount int) (val int64, err error)
+	Decr(key string) (val int64, err error)
+	DecrBy(key string, amount int) (val int64, err error)
+	Hmset(key string, val interface{}, expire int) (err error)
+	Hset(key, field string, val interface{}) (interface{}, error)
+	Hget(key, field string) (reply interface{}, err error)
+	HgetString(key, field string) (reply string, err error)
+	HgetInt(key, field string) (reply int, err error)
+	HgetInt64(key, field string) (reply int64, err error)
+	HgetBool(key, field string) (reply bool, err error)
+	HgetObject(key, field string, val interface{}) error
+	HgetAll(key string, val interface{}) error
+	Zadd(key string, score int64, member string) (reply interface{}, err error)
+	Zrem(key string, member string) (reply interface{}, err error)
+	Zscore(key string, member string) (int64, error)
+	Zrank(key, member string) (int64, error)
+	Zrevrank(key, member string) (int64, error)
+	Zrange(key string, from, to int64) (map[string]int64, error)
+	Zrevrange(key string, from, to int64) (map[string]int64, error)
+	ZrangeByScore(key string, from, to, offset int64, count int) (map[string]int64, error)
+	ZrevrangeByScore(key string, from, to, offset int64, count int) (map[string]int64, error)
+	Publish(channel, message string) (int, error)
+	Blpop(channel string, time interface{}) (interface{}, error)
+	Rpush(channel, msg string) (interface{}, error)
+}
+
 func (r *Client) Do(commandName string, args ...interface{}) (reply interface{}, err error) {
 	conn := r.pool.Get()
 	defer conn.Close()

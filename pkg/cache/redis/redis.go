@@ -1,12 +1,13 @@
 package redis
 
 import (
+	"github.com/beego/beemod/pkg/datasource"
+	"github.com/beego/beemod/pkg/module"
 	"log"
 	"os"
 	"sync"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/gomodule/redigo/redis"
 
 	"github.com/beego/beemod/pkg/common"
@@ -14,44 +15,59 @@ import (
 
 var defaultCaller = &callerStore{
 	Name: common.ModRedisName,
+	Key:  module.ConfigPrefix + module.RedisName,
 }
 
 type callerStore struct {
-	Name         string
-	IsBackground bool
-	caller       sync.Map
-	cfg          Cfg
+	Name  string
+	store sync.Map
+	cfg   map[string]CallerCfg
+	Key   string
 }
 
 type Client struct {
 	pool *redis.Pool
 }
 
-func Register() common.Caller {
+func DefaultBuild() module.Invoker {
 	return defaultCaller
 }
 
+func (c *callerStore) InitCfg(ds datasource.Datasource) error {
+	c.cfg = make(map[string]CallerCfg, 0)
+	ds.Range(c.Key, func(key string, name string) bool {
+		config := CallerCfg{}
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
+		}
+		c.cfg[name] = config
+		return true
+	})
+	return nil
+}
+
+func (c *callerStore) Run() error {
+	for name, cfg := range c.cfg {
+		db := Provider(cfg)
+		defaultCaller.store.Store(name, db)
+	}
+	return nil
+}
+
 func Caller(name string) *Client {
-	obj, ok := defaultCaller.caller.Load(name)
+	obj, ok := defaultCaller.store.Load(name)
 	if !ok {
 		return nil
 	}
 	return obj.(*Client)
 }
 
-func (c *callerStore) InitCfg(cfg []byte) error {
-	if err := toml.Unmarshal(cfg, &c.cfg); err != nil {
-		return err
+func Invoker(name string) *Client {
+	obj, ok := defaultCaller.store.Load(name)
+	if !ok {
+		return nil
 	}
-	return nil
-}
-
-func (c *callerStore) InitCaller() error {
-	for name, cfg := range c.cfg.Muses.Redis {
-		db := Provider(cfg)
-		defaultCaller.caller.Store(name, db)
-	}
-	return nil
+	return obj.(*Client)
 }
 
 func Provider(cfg CallerCfg) (resp *Client) {
@@ -63,8 +79,9 @@ func Provider(cfg CallerCfg) (resp *Client) {
 		redis.DialPassword(cfg.Password),
 	}
 
+
 	resp = &Client{
-		&redis.Pool{
+		pool: &redis.Pool{
 			Dial: func() (redis.Conn, error) {
 				c, err := redis.Dial("tcp", cfg.Addr, dialOptions...)
 				if err != nil {
