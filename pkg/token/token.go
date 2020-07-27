@@ -88,7 +88,7 @@ func provider(cfg InvokerCfg) (client standard.TokenAccessor, err error) {
 
 	// 如果没有引用的logger，就创建一个
 	if len(cfg.LoggerRef) > 0 {
-		loggerClient = logger.Caller(cfg.LoggerRef)
+		loggerClient = logger.Invoker(cfg.LoggerRef)
 	} else {
 		loggerClient = logger.Provider(logger.CallerCfg(cfg.Logger))
 	}
