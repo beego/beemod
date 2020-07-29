@@ -3,22 +3,21 @@ package logger
 import (
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"github.com/beego/beemod/pkg/common"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
 	"sync"
 )
 
 var defaultCaller = &callerStore{
-	Name: common.ModLoggerName,
+	Name: module.LogName,
 	Key:  module.ConfigPrefix + module.LogName,
 }
 
 type callerStore struct {
-	Name         string
-	caller       sync.Map
-	cfg          map[string]CallerCfg
-	Key          string
+	Name   string
+	caller sync.Map
+	cfg    map[string]CallerCfg
+	Key    string
 }
 
 type Client struct {

@@ -2,8 +2,6 @@ package mysql
 
 import "github.com/astaxie/beego/orm"
 
-var TableName string
-
 func init() {
 	orm.RegisterModel(new(AccessToken))
 }

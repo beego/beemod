@@ -12,13 +12,12 @@ import (
 	"github.com/beego/beemod/pkg/token/standard"
 
 	"github.com/beego/beemod/pkg/cache/redis"
-	"github.com/beego/beemod/pkg/common"
 	"github.com/beego/beemod/pkg/database/mysql"
 	"github.com/beego/beemod/pkg/logger"
 )
 
 var defaultCallerStore = &callerStore{
-	Name: common.ModTokenName,
+	Name: module.TokenName,
 	Key:  module.ConfigPrefix + module.TokenName,
 }
 

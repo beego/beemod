@@ -10,7 +10,7 @@ import (
 )
 
 var defaultCaller = &callerStore{
-	Name: common.ModMysqlName,
+	Name: module.MysqlName,
 	Key:  module.ConfigPrefix + module.MysqlName,
 }
 

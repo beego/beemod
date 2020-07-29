@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"github.com/beego/beemod/pkg/common"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
 	"github.com/gomodule/redigo/redis"
@@ -12,7 +11,7 @@ import (
 )
 
 var defaultCaller = &callerStore{
-	Name: common.ModRedisName,
+	Name: module.RedisName,
 	Key:  module.ConfigPrefix + module.RedisName,
 }
 

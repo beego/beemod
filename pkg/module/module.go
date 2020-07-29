@@ -5,6 +5,7 @@ import (
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
+	"time"
 )
 
 // global config
@@ -44,4 +45,14 @@ type InvokerFunc func() Invoker
 type ConfigStore struct {
 	Ini   *ini.File
 	Viper *viper.Viper
+}
+
+type Duration struct {
+	time.Duration
+}
+
+func (d *Duration) UnmarshalText(text []byte) error {
+	var err error
+	d.Duration, err = time.ParseDuration(string(text))
+	return err
 }

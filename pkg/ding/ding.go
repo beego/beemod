@@ -48,7 +48,7 @@ func (c *descriptor) Build() module.Invoker {
 
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
-	var config InvokerCfg
+	config := DefaultInvokerCfg
 	ds.Range(c.Key, func(key string, name string) bool {
 		if err := ds.Unmarshal(key, &config); err != nil {
 			return false

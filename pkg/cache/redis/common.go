@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"github.com/beego/beemod/pkg/common"
+	"github.com/beego/beemod/pkg/module"
 )
 
 type Cfg struct {
@@ -17,12 +17,12 @@ type CallerCfg struct {
 	Addr           string // 127.0.0.1:6379
 	DB             int
 	Password       string
-	ConnectTimeout common.Duration
-	ReadTimeout    common.Duration
-	WriteTimeout   common.Duration
+	ConnectTimeout module.Duration
+	ReadTimeout    module.Duration
+	WriteTimeout   module.Duration
 
 	MaxIdle     int
 	MaxActive   int
-	IdleTimeout common.Duration
+	IdleTimeout module.Duration
 	Wait        bool
 }
