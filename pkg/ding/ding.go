@@ -41,11 +41,6 @@ func Invoker(name string) *Client {
 	return obj.(*Client)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
-
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
 	config := DefaultInvokerCfg
@@ -71,16 +66,6 @@ func (c *descriptor) Run() error {
 	return nil
 }
 
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.WebhookUrl == "" {
-			return true
-		}
-	}
-	return false
-}
-
 func provider(cfg InvokerCfg) (status *http.Client) {
 	client := &http.Client{}
 	return client
@@ -98,7 +83,7 @@ func (c *Client) SendMsg(msg string) (string, error) {
 		return "", err
 	}
 	client := c.ss
-	req.Header.Set("Content-Type", "application/json") //这个一定要加，不加form的值post不过去，被坑了两小时
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(req) //发送
 	if err != nil {

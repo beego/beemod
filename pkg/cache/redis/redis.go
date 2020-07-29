@@ -51,14 +51,6 @@ func (c *callerStore) Run() error {
 	return nil
 }
 
-func Caller(name string) *Client {
-	obj, ok := defaultCaller.store.Load(name)
-	if !ok {
-		return nil
-	}
-	return obj.(*Client)
-}
-
 func Invoker(name string) *Client {
 	obj, ok := defaultCaller.store.Load(name)
 	if !ok {

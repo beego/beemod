@@ -116,7 +116,7 @@ func createMysqlAccessor(cfg InvokerCfg, loggerClient *logger.Client) (accessor 
 func createRedisAccessor(cfg InvokerCfg, loggerClient *logger.Client) (standard.TokenAccessor, error) {
 	var redisClient *redis.Client
 	if len(cfg.RedisRef) > 0 {
-		redisClient = redis.Caller(cfg.RedisRef)
+		redisClient = redis.Invoker(cfg.RedisRef)
 	} else {
 		redisClient = redis.Provider(redis.CallerCfg(cfg.Redis))
 	}

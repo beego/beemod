@@ -48,10 +48,6 @@ func Invoker(name string) *Client {
 	return obj.(*Client)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
 
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
@@ -78,15 +74,6 @@ func provider(cfg InvokerCfg) *QrEntity {
 	return &QrEntity{avatarY: cfg.AvatarY, avatarX: cfg.AvatarX, Size: cfg.Size, foreground: cfg.Foreground}
 }
 
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.Mode == "" {
-			return true
-		}
-	}
-	return false
-}
 func (qe *QrEntity) NewFg(content, src string) error {
 	code, err := qr.New(content, qr.Highest)
 	if err != nil {

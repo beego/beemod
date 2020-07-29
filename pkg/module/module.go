@@ -1,7 +1,6 @@
 package module
 
 import (
-	"context"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
@@ -23,21 +22,6 @@ type Invoker interface {
 	InitCfg(ds datasource.Datasource) error
 	// Init Caller returns init caller error
 	Run() error
-}
-
-// Invoker Enable
-type InvokerDisable interface {
-	IsDisabled() bool
-}
-
-// Invoker Background
-type InvokerBackground interface {
-	RunBackground(ctx context.Context) error
-}
-
-func IsDisabled(invoker Invoker) bool {
-	instance, ok := invoker.(InvokerDisable)
-	return ok && instance.IsDisabled()
 }
 
 type InvokerFunc func() Invoker

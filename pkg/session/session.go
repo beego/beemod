@@ -33,11 +33,6 @@ func Invoker(name string) *session.Manager {
 	return obj.(*session.Manager)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
-
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
 	ds.Range(c.Key, func(key string, name string) bool {
@@ -63,19 +58,6 @@ func (c *descriptor) Run() error {
 	return nil
 }
 
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.MangerCfg == nil {
-			return true
-		}
-
-		if cfg.Mode != "memory" && len(cfg.MangerCfg.ProviderConfig) <= 0 {
-			return true
-		}
-	}
-	return false
-}
 
 func provider(cfg InvokerCfg) (manager *session.Manager, err error) {
 	manager, err = session.NewManager(cfg.Mode, cfg.MangerCfg)

@@ -77,16 +77,6 @@ func (c *descriptor) Run() error {
 	return nil
 }
 
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.Mode == "alioss" && cfg.AccessKeyID == "" && cfg.AccessKeySecret == "" {
-			return true
-		}
-	}
-	return false
-}
-
 func provider(cfg InvokerCfg) (client standard.Oss, err error) {
 	if cfg.Mode == "alioss" {
 		client, err = alioss.NewOss(cfg.Addr, cfg.AccessKeyID, cfg.AccessKeySecret, cfg.OssBucket, cfg.IsDeleteSrcPath)

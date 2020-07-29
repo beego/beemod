@@ -54,11 +54,6 @@ func Invoker(name string) *Client {
 	return obj.(*Client)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
-
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
 	ds.Range(c.Key, func(key string, name string) bool {
@@ -85,11 +80,6 @@ func (c *descriptor) Run() error {
 		defaultInvoker.store.Store(name, c)
 	}
 	return nil
-}
-
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	return false
 }
 
 func provider(cfg InvokerCfg) (client SocialService, err error) {
