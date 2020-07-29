@@ -58,7 +58,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Ini{
-				f,
+				Ini: f,
 			}
 		} else {
 			viper.SetConfigFile(cfgInfo)
@@ -73,7 +73,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Toml{
-				viper.GetViper(),
+				Viper: viper.GetViper(),
 			}
 		}
 	case []byte:
@@ -84,7 +84,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Ini{
-				f,
+				Ini: f,
 			}
 		} else {
 			rBytes := bytes.NewReader(cfgInfo)
@@ -98,9 +98,8 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				m.err = err
 				return m
 			}
-			viper.Debug()
 			m.ds = &datasource.Toml{
-				viper.GetViper(),
+				Viper: viper.GetViper(),
 			}
 		}
 	default:

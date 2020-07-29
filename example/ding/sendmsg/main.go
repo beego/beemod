@@ -10,7 +10,7 @@ var config = `
   [beego.ding.myding]
 	mode = "file"
 	debug = true
-  WebhookUrl = "https://oapi.dingtalk.com/robot/send?access_token="
+  	WebhookUrl = "https://oapi.dingtalk.com/robot/send?access_token="
 `
 
 func main() {

@@ -23,7 +23,7 @@ type descriptor struct {
 	cfg   map[string]InvokerCfg
 }
 
-type QrCode struct {
+type Client struct {
 	cfg InvokerCfg
 	Of  *QrEntity
 }
@@ -40,12 +40,12 @@ func DefaultBuild() module.Invoker {
 }
 
 // invoker
-func Invoker(name string) *QrCode {
+func Invoker(name string) *Client {
 	obj, ok := defaultInvoker.store.Load(name)
 	if !ok {
 		return nil
 	}
-	return obj.(*QrCode)
+	return obj.(*Client)
 }
 
 // todo with option
@@ -69,7 +69,7 @@ func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 func (c *descriptor) Run() error {
 	for name, cfg := range c.cfg {
 		qrInter := provider(cfg)
-		defaultInvoker.store.Store(name, &QrCode{cfg: cfg, Of: qrInter})
+		defaultInvoker.store.Store(name, &Client{cfg: cfg, Of: qrInter})
 	}
 	return nil
 }

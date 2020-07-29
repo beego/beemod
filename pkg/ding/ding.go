@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -48,23 +47,15 @@ func (c *descriptor) Build() module.Invoker {
 }
 
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
-	// todo ini cant unmarshal
-	switch cfgType {
-	case "toml":
-		if err := viper.UnmarshalKey(c.Key, &c.cfg); err != nil {
-			return err
+	c.cfg = make(map[string]InvokerCfg, 0)
+	var config InvokerCfg
+	ds.Range(c.Key, func(key string, name string) bool {
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
 		}
-		// we need assign the default config, so we should unmarshal twice
-		for name := range c.cfg {
-			config := DefaultInvokerCfg
-			if err := viper.UnmarshalKey(c.Key+"."+name, &config); err != nil {
-				return err
-			}
-			c.cfg[name] = config
-		}
-	case "ini":
-		panic("not implement ini")
-	}
+		c.cfg[name] = config
+		return true
+	})
 	return nil
 }
 

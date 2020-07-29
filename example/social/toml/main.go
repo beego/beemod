@@ -32,5 +32,4 @@ func main() {
 	fmt.Println(client)
 	a, b := client.GetAccessToken("code")
 	fmt.Println(a, b)
-
 }

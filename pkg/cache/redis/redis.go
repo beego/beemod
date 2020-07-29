@@ -1,16 +1,14 @@
 package redis
 
 import (
+	"github.com/beego/beemod/pkg/common"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
+	"github.com/gomodule/redigo/redis"
 	"log"
 	"os"
 	"sync"
 	"time"
-
-	"github.com/gomodule/redigo/redis"
-
-	"github.com/beego/beemod/pkg/common"
 )
 
 var defaultCaller = &callerStore{
@@ -78,7 +76,6 @@ func Provider(cfg CallerCfg) (resp *Client) {
 		redis.DialDatabase(cfg.DB),
 		redis.DialPassword(cfg.Password),
 	}
-
 
 	resp = &Client{
 		pool: &redis.Pool{
