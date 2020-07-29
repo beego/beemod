@@ -13,7 +13,7 @@ const configTpl = `
 		avatarX = 40
 		avatarY = 40
 		size = 280
-		foreground = "/Users/ding/Desktop/qrcode/example/static/f.jpg"
+		foreground = "./gopher-500.png"
 `
 
 func TestQrCodeConfig(t *testing.T) {
@@ -64,8 +64,8 @@ func TestQrCodeInstance(t *testing.T) {
 				c.So(obj, c.ShouldNotBeNil)
 				c.Convey("testing method", func() {
 					err = obj.Of.New("Hello BeeGo", "./qr.png")
-					err = obj.Of.NewFg("Hello BeeGo", "./qr_fg.png")
-					err = obj.Of.NewAvatar("Hello BeeGo", "./fg.png", "./qr_avatar.png", 60, true)
+					//err = obj.Of.NewFg("Hello BeeGo", "./qr_fg.png")
+					//err = obj.Of.NewAvatar("Hello BeeGo", "./fg.png", "./qr_avatar.png", 60, true)
 					c.So(err, c.ShouldBeNil)
 				})
 			})
