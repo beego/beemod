@@ -11,6 +11,7 @@ env:
   - GO111MODULE=on
 before_install:
   - go mod tidy
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS beetest;'
 
 script:
   - go test -v -race ./... -coverprofile=coverage.txt -covermode=atomic

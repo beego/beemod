@@ -83,7 +83,6 @@ func TestMysqlInstance(t *testing.T) {
 				obj = Invoker("dev")
 				c.So(obj, c.ShouldNotBeNil)
 				c.Convey("testing method", func() {
-					//创建表
 					err = orm.RunSyncdb(obj.Cfg.AliasName, false, false)
 					user := new(User)
 					user.Name = "testName"
