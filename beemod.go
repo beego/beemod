@@ -134,12 +134,6 @@ func (m *BeeMod) Run() (err error) {
 
 		logs.Info("module", name, "cfg end")
 
-		// is invoker enabled
-		if module.IsDisabled(invoker) {
-			logs.Critical("module", name, "not enabled")
-			panic("module" + name + "not enabled")
-		}
-
 		logs.Info("module", name, "run start")
 		if err = invoker.Run(); err != nil {
 			logs.Info("module", name, "run error")

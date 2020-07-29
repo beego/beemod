@@ -1,4 +1,3 @@
-// TODO: qr_code create impl
 // Author: SDing <deen.job@qq.com>
 // Date: 2020/6/28 - 3:07 PM
 

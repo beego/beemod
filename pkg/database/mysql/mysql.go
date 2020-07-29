@@ -1,8 +1,11 @@
+/**
+* @Author: myxy99 <myxy99@foxmail.com>
+* @Date: 2020/7/27 12:23
+*/
 package mysql
 
 import (
 	"github.com/astaxie/beego/orm"
-	"github.com/beego/beemod/pkg/common"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
 	_ "github.com/go-sql-driver/mysql"

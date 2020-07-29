@@ -100,7 +100,6 @@ func (c *Client) ListObjects(options ...standard.Option) (standard.ListObjectsRe
 	return standard.ListObjectsResult{}, errors.New("file type is not supported ListObjects method")
 }
 
-// todo can't sign
 func (c *Client) SignURL(dstPath string, method string, expiredInSec int64, options ...standard.Option) (resp string, err error) {
 	resp = c.cdnName + dstPath
 	return

@@ -5,7 +5,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// TODO(两个都从配置里面读取)
 var AccessTokenIss string
 var AccessTokenKey string
 
@@ -14,8 +13,7 @@ func InitAccessToken(accessTokenIss, accessTokenKey string) {
 	AccessTokenKey = accessTokenKey
 }
 
-type JwtTokenAccessor struct {
-}
+type JwtTokenAccessor struct {}
 
 func (g *JwtTokenAccessor) EncodeAccessToken(jwtId int, uid int, startTime int64) (tokenStr string, err error) {
 	jwtToken := jwt.New(jwt.SigningMethodHS256)

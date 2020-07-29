@@ -1,3 +1,7 @@
+/**
+* @Author: myxy99 <myxy99@foxmail.com>
+* @Date: 2020/7/29 17:12
+ */
 package qr_code
 
 import (
