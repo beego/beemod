@@ -14,7 +14,7 @@ const configTpl = `
 	host = "smtp.yeah.net"
 	port = 25
 	FromEmail = "yangzzzzzz@yeah.net"
-	FromPassword = "UKQOELRAQBOGKCCN"
+	FromPassword = "xxxxxxxxxxxxxxx"
 `
 
 const FromEmail = "yangzzzzzz@yeah.net"

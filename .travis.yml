@@ -1,0 +1,16 @@
+language: go
+
+sudo: required
+go:
+  - 1.13.x
+  - 1.14.x
+services:
+  - mysql
+  - redis
+env:
+  - GO111MODULE=on
+before_install:
+  - go get tidy
+
+script:
+  - go test -v -race ./... -coverprofile=coverage.txt -covermode=atomic
