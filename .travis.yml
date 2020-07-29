@@ -10,7 +10,7 @@ services:
 env:
   - GO111MODULE=on
 before_install:
-  - go get tidy
+  - go mod tidy
 
 script:
   - go test -v -race ./... -coverprofile=coverage.txt -covermode=atomic
