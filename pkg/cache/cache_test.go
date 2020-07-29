@@ -10,7 +10,7 @@ import (
 const configTpl = `
 	[beego.cache.redis]
 		key = "default"
-		conn = ":6379"
+		conn = "127.0.0.1:6379"
 		password = ""
 `
 
