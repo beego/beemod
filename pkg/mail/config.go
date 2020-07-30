@@ -3,12 +3,6 @@
 
 package mail
 
-// example
-/**
-[beemod.mail.my]
-	debug = true
-	mode  = "smtp"
-*/
 type InvokerCfg struct {
 	Debug        bool
 	Mode         string

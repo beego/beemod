@@ -2,15 +2,6 @@ package session
 
 import "github.com/astaxie/beego/session"
 
-/**
-[beego.session.mysession]
-	mode = "memory"
-	debug = true
-[beego.session.mysession.mangerCfg]
-	cookieName = "gosessionid"
-	gclifetime = 10
-	enableSetCookie = true
-*/
 type InvokerCfg struct {
 	Debug     bool
 	Mode      string

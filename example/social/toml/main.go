@@ -7,18 +7,24 @@ import (
 )
 
 var config = `
-	[beego.oauth2.wx]
-		appID = "app_id"
-		debug = true
-        appSecret = "app_secret"
-		mode = "wx"
-		redirectURI = "www.beego.com"
-	[beego.oauth2.github]
-		appID = "app_id"
-		debug = true
-        appSecret = "app_secret"
-		mode = "github"
-		redirectURI = "www.beego.com"
+[beemod.oauth2.qq]
+	debug = true
+	mode  = "qq"
+	app_id  = "app_id"
+	app_secret  = "app_secret"
+	redirectURI = "www.beego.com"
+[beemod.oauth2.wx]
+	debug = true
+	mode  = "wx"
+	app_id  = "app_id"
+	app_secret  = "app_secret"
+	redirectURI = "www.beego.com"
+[beemod.oauth2.github]
+	debug = true
+	mode  = "github"
+	app_id  = "app_id"
+	app_secret  = "app_secret"
+	redirectURI = "www.beego.com"
 `
 
 func main() {

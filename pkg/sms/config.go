@@ -3,12 +3,6 @@
 
 package sms
 
-// example
-/**
-[beemod.sms.my]
-	debug = true
-	mode  = "alibaba"
-*/
 type InvokerCfg struct {
 	Debug        bool
 	Mode         string
