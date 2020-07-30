@@ -1,11 +1,5 @@
 package mysql
 
-type Cfg struct {
-	Muses struct {
-		Mysql map[string]CallerCfg `toml:"mysql"`
-	} `toml:"muses"`
-}
-
 type CallerCfg struct {
 	Username       string
 	Password       string
