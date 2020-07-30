@@ -4,12 +4,6 @@ import (
 	"github.com/beego/beemod/pkg/module"
 )
 
-type Cfg struct {
-	Muses struct {
-		Redis map[string]CallerCfg `toml:"redis"`
-	} `toml:"muses"`
-}
-
 type CallerCfg struct {
 	Debug bool
 
