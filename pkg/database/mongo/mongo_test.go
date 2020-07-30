@@ -6,15 +6,21 @@ package mongo
 
 import (
 	"github.com/beego/beemod"
+	"github.com/globalsign/mgo/bson"
 	c "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
+
+type Movie struct {
+	Id   bson.ObjectId `bson:"_id" json:"id"`
+	Name string        `bson:"name" json:"name"`
+}
 
 const configTpl = `
 [beego.mongo.dev]
     URL   = "127.0.0.1:27017"
 	debug = true
-    source = "mydb_test"
+    source = "admin"
     user   = "root"
     password   = "root"
 `
@@ -70,7 +76,10 @@ func TestMysqlInstance(t *testing.T) {
 				obj = Invoker("dev")
 				c.So(obj, c.ShouldNotBeNil)
 				c.Convey("testing method", func() {
-					err = obj.Insert(db, collection, "testData")
+					err = obj.Insert(db, collection, Movie{
+						Id:   bson.NewObjectId(),
+						Name: "test123",
+					})
 					c.So(err, c.ShouldBeNil)
 				})
 			})

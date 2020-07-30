@@ -49,6 +49,7 @@ func main() {
 
 	//Insert
 	user.Name = "user123"
+	user.Id = bson.NewObjectId()
 	err = client.Insert(db, collection, user)
 	if err != nil {
 		panic("Insert err:" + err.Error())
