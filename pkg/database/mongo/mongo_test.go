@@ -14,9 +14,9 @@ const configTpl = `
 [beego.mongo.dev]
     URL   = "127.0.0.1:27017"
 	debug = true
-    source = "admin"
-    user   = ""
-    password   = ""
+    source = "mydb_test"
+    user   = "root"
+    password   = "root"
 `
 const (
 	db         = "Movies"

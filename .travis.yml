@@ -13,6 +13,9 @@ env:
 before_install:
   - go mod tidy
   - mysql -e 'CREATE DATABASE IF NOT EXISTS beetest;'
-
+  - mkdir -p data/db
+  - mongod --dbpath=data/db &
+  - sleep 5
+  - mongo mydb_test --eval 'db.createUser({user:"root",pwd:"root",roles:["readWrite"]});'
 script:
   - go test -v -race ./... -coverprofile=coverage.txt -covermode=atomic
