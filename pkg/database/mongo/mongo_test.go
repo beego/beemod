@@ -21,15 +21,15 @@ const configTpl = `
     URL   = "127.0.0.1:27017"
 	debug = true
     source = "admin"
-    user   = "root"
-    password   = "root"
+    user   = ""
+    password   = ""
 `
 const (
 	db         = "Movies"
 	collection = "MovieModel"
 )
 
-func TestMysqlConfig(t *testing.T) {
+func TestMongoConfig(t *testing.T) {
 	var (
 		err    error
 		config string
@@ -43,7 +43,7 @@ func TestMysqlConfig(t *testing.T) {
 	})
 }
 
-func TestMysqlInit(t *testing.T) {
+func TestMongoInit(t *testing.T) {
 	var (
 		err    error
 		config string
@@ -61,7 +61,7 @@ func TestMysqlInit(t *testing.T) {
 	})
 }
 
-func TestMysqlInstance(t *testing.T) {
+func TestMongoInstance(t *testing.T) {
 	var (
 		err    error
 		obj    *Client
