@@ -12,6 +12,7 @@ import (
 
 const configTpl = `
   [beego.logger.dev]
+	type = "file"
     level = 7
     path = "log.log"
 `

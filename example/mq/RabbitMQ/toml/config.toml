@@ -1,0 +1,2 @@
+[beego.rabbitmq.dev]
+host = "amqp://admin:admin@docker.myxy99.cn:5672/my_vhost"

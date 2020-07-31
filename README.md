@@ -3,6 +3,8 @@
 * oss
     * file
     * alioss
+* mq
+    * RabbitMQ
 * session
     * session
 * cache
