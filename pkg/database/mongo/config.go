@@ -5,9 +5,9 @@
 package mongo
 
 type CallerCfg struct {
-	Debug    bool
-	URL      string
-	Source   string
-	User     string
-	Password string
+	Debug    bool `ini:"debug"`
+	URL      string `ini:"url"`
+	Source   string `ini:"source"`
+	User     string `ini:"user"`
+	Password string `ini:"password"`
 }

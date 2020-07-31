@@ -4,11 +4,12 @@
 package qr_code
 
 type InvokerCfg struct {
-	Debug            bool
-	Mode             string
-	AvatarX, AvatarY int
-	Size             int
-	Foreground       string
+	Debug      bool   `ini:"debug"`
+	Mode       string `ini:"mode"`
+	AvatarX    int    `ini:"avatarX"`
+	AvatarY    int    `ini:"avatarY"`
+	Size       int    `ini:"size"`
+	Foreground string `ini:"foreground"`
 }
 
 var DefaultInvokerCfg = InvokerCfg{

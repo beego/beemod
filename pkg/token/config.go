@@ -18,17 +18,17 @@ type LoggerCallerCfg logger.CallerCfg
 type InvokerCfg struct {
 	Mode string
 
-	RedisTokenKeyPattern      string `toml:"redisTokenKeyPattern"`
-	AccessTokenExpireInterval int64  `toml:"accessTokenExpireInterval"`
-	AccessTokenIss            string `toml:"accessTokenIss"`
-	AccessTokenKey            string `toml:"accessTokenKey"`
+	RedisTokenKeyPattern      string `toml:"redisTokenKeyPattern" ini:"redisTokenKeyPattern"`
+	AccessTokenExpireInterval int64  `toml:"accessTokenExpireInterval" ini:"accessTokenExpireInterval"`
+	AccessTokenIss            string `toml:"accessTokenIss" ini:"accessTokenIss"`
+	AccessTokenKey            string `toml:"accessTokenKey" ini:"accessTokenKey"`
 
-	LoggerRef string
-	Logger    LoggerCallerCfg `toml:"logger"`
+	LoggerRef string          `ini:"loggerRef" toml:"loggerRef"`
+	Logger    LoggerCallerCfg `toml:"logger" ini:"logger"`
 
-	MysqlRef string
-	Mysql    MysqlCallerCfg `toml:"mysql"`
+	MysqlRef string         `ini:"mysqlRef" toml:"mysqlRef"`
+	Mysql    MysqlCallerCfg `toml:"mysql" ini:"mysql"`
 
-	RedisRef string
-	Redis    RedisCallerCfg `toml:"redis"`
+	RedisRef string         `ini:"redisRef" toml:"redisRef"`
+	Redis    RedisCallerCfg `toml:"redis" ini:"redis"`
 }

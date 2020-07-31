@@ -8,9 +8,11 @@ services:
   - mysql
   - redis
   - mongodb
+  - docker
 env:
   - GO111MODULE=on
 before_install:
+  - docker run -d --hostname my-rabbit --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq:management
   - go mod tidy
   - mysql -e 'CREATE DATABASE IF NOT EXISTS beetest;'
 script:

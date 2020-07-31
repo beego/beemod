@@ -3,9 +3,9 @@ package session
 import "github.com/astaxie/beego/session"
 
 type InvokerCfg struct {
-	Debug     bool
-	Mode      string
-	MangerCfg *session.ManagerConfig
+	Debug     bool `ini:"debug"`
+	Mode      string `ini:"mode"`
+	MangerCfg *session.ManagerConfig `ini:"mangerCfg"`
 }
 
 var DefaultInvokerCfg = InvokerCfg{

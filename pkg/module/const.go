@@ -16,6 +16,7 @@ const (
 	MysqlName   = "mysql"
 	LogName     = "logger"
 	MongoName   = "mongo"
+	RabbitmqName   = "rabbitmq"
 )
 
 // order invokers
@@ -33,6 +34,7 @@ var OrderInvokers = []invokerAttr{
 	{LogName},
 	{RedisName},
 	{MongoName},
+	{RabbitmqName},
 }
 
 type invokerAttr struct {
