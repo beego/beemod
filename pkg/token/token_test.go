@@ -36,8 +36,9 @@ const configTpl = `
     connMaxLifetime = "300s"
 	aliasName="default"
 [beego.token.dev.Logger]
+	type = "file"
     level = 7
-    path = "token.log"
+    path = "log.log"
 `
 
 func TestTokenConfig(t *testing.T) {

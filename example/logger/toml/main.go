@@ -10,9 +10,9 @@ import (
 
 // custom config toml template
 var config = `
-  [beego.logger.dev]
+	type = "file"
     level = 7
-    path = "token.log"
+    path = "log.log"
 `
 
 func main() {
