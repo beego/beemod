@@ -1,4 +1,3 @@
-// TODO: alibaba cloud sms example
 // Author: SDing <deen.job@qq.com>
 // Date: 2020/6/28 - 5:40 PM
 

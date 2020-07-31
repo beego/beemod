@@ -1,0 +1,17 @@
+language: go
+
+sudo: required
+go:
+  - 1.13.x
+  - 1.14.x
+services:
+  - mysql
+  - redis
+  - mongodb
+env:
+  - GO111MODULE=on
+before_install:
+  - go mod tidy
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS beetest;'
+script:
+  - go test -v -race ./... -coverprofile=coverage.txt -covermode=atomic

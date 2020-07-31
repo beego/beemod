@@ -5,6 +5,7 @@
 *.so
 *.dylib
 .idea
+token.log
 /vendor
 
 # Test binary, built with `go test -c`

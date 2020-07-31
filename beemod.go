@@ -58,7 +58,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Ini{
-				f,
+				Ini: f,
 			}
 		} else {
 			viper.SetConfigFile(cfgInfo)
@@ -73,7 +73,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Toml{
-				viper.GetViper(),
+				Viper: viper.GetViper(),
 			}
 		}
 	case []byte:
@@ -84,7 +84,7 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				return m
 			}
 			m.ds = &datasource.Ini{
-				f,
+				Ini: f,
 			}
 		} else {
 			rBytes := bytes.NewReader(cfgInfo)
@@ -98,9 +98,8 @@ func (m *BeeMod) SetCfg(cfg interface{}, cfgType string) *BeeMod {
 				m.err = err
 				return m
 			}
-			viper.Debug()
 			m.ds = &datasource.Toml{
-				viper.GetViper(),
+				Viper: viper.GetViper(),
 			}
 		}
 	default:
@@ -134,12 +133,6 @@ func (m *BeeMod) Run() (err error) {
 		}
 
 		logs.Info("module", name, "cfg end")
-
-		// is invoker enabled
-		if module.IsDisabled(invoker) {
-			logs.Critical("module", name, "not enabled")
-			panic("module" + name + "not enabled")
-		}
 
 		logs.Info("module", name, "run start")
 		if err = invoker.Run(); err != nil {

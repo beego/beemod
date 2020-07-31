@@ -1,10 +1,10 @@
 package module
 
 import (
-	"context"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
+	"time"
 )
 
 // global config
@@ -16,7 +16,7 @@ type Descriptor struct {
 	Invoker Invoker
 }
 
-// Invoker
+// InvokerRegister
 type Invoker interface {
 	// Init cfg returns parse cfg error.
 	InitCfg(ds datasource.Datasource) error
@@ -24,24 +24,19 @@ type Invoker interface {
 	Run() error
 }
 
-// Invoker Enable
-type InvokerDisable interface {
-	IsDisabled() bool
-}
-
-// Invoker Background
-type InvokerBackground interface {
-	RunBackground(ctx context.Context) error
-}
-
-func IsDisabled(invoker Invoker) bool {
-	instance, ok := invoker.(InvokerDisable)
-	return ok && instance.IsDisabled()
-}
-
 type InvokerFunc func() Invoker
 
 type ConfigStore struct {
 	Ini   *ini.File
 	Viper *viper.Viper
+}
+
+type Duration struct {
+	time.Duration
+}
+
+func (d *Duration) UnmarshalText(text []byte) error {
+	var err error
+	d.Duration, err = time.ParseDuration(string(text))
+	return err
 }

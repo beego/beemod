@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/beego/beemod/pkg/datasource"
 	"github.com/beego/beemod/pkg/module"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -42,29 +41,16 @@ func Invoker(name string) *Client {
 	return obj.(*Client)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
-
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
-	// todo ini cant unmarshal
-	switch cfgType {
-	case "toml":
-		if err := viper.UnmarshalKey(c.Key, &c.cfg); err != nil {
-			return err
+	c.cfg = make(map[string]InvokerCfg, 0)
+	config := DefaultInvokerCfg
+	ds.Range(c.Key, func(key string, name string) bool {
+		if err := ds.Unmarshal(key, &config); err != nil {
+			return false
 		}
-		// we need assign the default config, so we should unmarshal twice
-		for name := range c.cfg {
-			config := DefaultInvokerCfg
-			if err := viper.UnmarshalKey(c.Key+"."+name, &config); err != nil {
-				return err
-			}
-			c.cfg[name] = config
-		}
-	case "ini":
-		panic("not implement ini")
-	}
+		c.cfg[name] = config
+		return true
+	})
 	return nil
 }
 
@@ -78,16 +64,6 @@ func (c *descriptor) Run() error {
 		defaultInvoker.store.Store(name, c)
 	}
 	return nil
-}
-
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.WebhookUrl == "" {
-			return true
-		}
-	}
-	return false
 }
 
 func provider(cfg InvokerCfg) (status *http.Client) {
@@ -107,7 +83,7 @@ func (c *Client) SendMsg(msg string) (string, error) {
 		return "", err
 	}
 	client := c.ss
-	req.Header.Set("Content-Type", "application/json") //这个一定要加，不加form的值post不过去，被坑了两小时
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(req) //发送
 	if err != nil {

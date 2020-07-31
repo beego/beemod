@@ -1,4 +1,3 @@
-// TODO: mail mod impl
 // Author: SDing <deen.job@qq.com>
 // Date: 2020/6/28 - 12:07
 
@@ -43,10 +42,6 @@ func Invoker(name string) *Client {
 	return obj.(*Client)
 }
 
-// todo with option
-func (c *descriptor) Build() module.Invoker {
-	return c
-}
 
 func (c *descriptor) InitCfg(ds datasource.Datasource) error {
 	c.cfg = make(map[string]InvokerCfg, 0)
@@ -68,16 +63,6 @@ func (c *descriptor) Run() error {
 		defaultInvoker.store.Store(name, c)
 	}
 	return nil
-}
-
-// disabled
-func (c *descriptor) IsDisabled() bool {
-	for _, cfg := range c.cfg {
-		if cfg.Mode == "" {
-			return true
-		}
-	}
-	return false
 }
 
 func provider(cfg InvokerCfg) (dialer *gomail.Dialer) {

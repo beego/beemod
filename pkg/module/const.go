@@ -10,7 +10,12 @@ const (
 	MailName    = "mail"
 	DingName    = "ding"
 	CacheName   = "cache"
+	RedisName   = "redis"
 	QrcodeName  = "qrcode"
+	TokenName   = "token"
+	MysqlName   = "mysql"
+	LogName     = "logger"
+	MongoName   = "mongo"
 )
 
 // order invokers
@@ -23,6 +28,11 @@ var OrderInvokers = []invokerAttr{
 	{SmsName},
 	{MailName},
 	{QrcodeName},
+	{TokenName},
+	{MysqlName},
+	{LogName},
+	{RedisName},
+	{MongoName},
 }
 
 type invokerAttr struct {

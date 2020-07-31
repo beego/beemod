@@ -1,11 +1,5 @@
 package oss
 
-// example
-/**
-[beemod.oss.myoss]
-	debug = true
-	mode  = "file"
-*/
 type InvokerCfg struct {
 	Debug           bool   `ini:"debug"`
 	Mode            string `ini:"mode"`

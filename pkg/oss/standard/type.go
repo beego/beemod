@@ -1,6 +1,9 @@
 package standard
 
-import "time"
+import (
+	"encoding/xml"
+	"time"
+)
 
 type optionType string
 
@@ -19,7 +22,7 @@ type DeleteObjectsResult struct {
 
 // ObjectProperties defines Objecct properties
 type ObjectProperties struct {
-	Name         string    `xml:"Contents"`
+	Name         xml.Name    `xml:"Contents"`
 	Key          string    `xml:"Key"`          // Object key
 	Type         string    `xml:"Type"`         // Object type
 	Size         int64     `xml:"Size"`         // Object size
@@ -31,14 +34,14 @@ type ObjectProperties struct {
 
 // Owner defines OssBucket/Object's owner
 type Owner struct {
-	Name        string `xml:"Owner"`
+	Name        xml.Name `xml:"Owner"`
 	ID          string `xml:"ID"`          // Owner ID
 	DisplayName string `xml:"DisplayName"` // Owner's display name
 }
 
 // ListObjectsResult defines the result from ListObjects request
 type ListObjectsResult struct {
-	XMLName        string
+	XMLName        xml.Name
 	Prefix         string             // The object prefix
 	Marker         string             // The marker filter.
 	MaxKeys        int                // Max keys to return

@@ -7,11 +7,8 @@ type InvokerCfg struct {
 	Debug            bool
 	Mode             string
 	AvatarX, AvatarY int
-	// logo file path
-	//Logo string
-	// example: 150 * 150
-	Size       int
-	Foreground string
+	Size             int
+	Foreground       string
 }
 
 var DefaultInvokerCfg = InvokerCfg{

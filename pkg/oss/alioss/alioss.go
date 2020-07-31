@@ -58,7 +58,7 @@ func (c *Client) GetObject(dstPath string, options ...standard.Option) (ouput []
 }
 
 func (c *Client) GetObjectToFile(dstPath, srcPath string, options ...standard.Option) error {
-	panic("implement me")
+	return c.b.GetObjectToFile(dstPath, srcPath)
 }
 
 func (c *Client) DeleteObject(dstPath string) (err error) {
@@ -84,9 +84,42 @@ func (c *Client) DeleteObjects(dstPaths []string, options ...standard.Option) (o
 }
 
 func (c *Client) IsObjectExist(dstPath string) (bool, error) {
-	panic("implement me")
+	return c.b.IsObjectExist(dstPath)
 }
 
 func (c *Client) ListObjects(options ...standard.Option) (standard.ListObjectsResult, error) {
-	panic("implement me")
+	var (
+		Object    []standard.ObjectProperties
+		tmpObject standard.ObjectProperties
+		err       error
+		result    oss.ListObjectsResult
+	)
+	result, err = c.b.ListObjects()
+	if err != nil {
+		return standard.ListObjectsResult{}, nil
+	}
+	for _, i := range result.Objects {
+		tmpObject = standard.ObjectProperties{
+			Name:         i.XMLName,
+			Key:          i.Key,
+			Type:         i.Type,
+			Size:         i.Size,
+			ETag:         i.ETag,
+			Owner:        standard.Owner{Name: i.Owner.XMLName, ID: i.Owner.ID, DisplayName: i.Owner.DisplayName},
+			LastModified: i.LastModified,
+			StorageClass: i.StorageClass,
+		}
+		Object = append(Object, tmpObject)
+	}
+	return standard.ListObjectsResult{
+		XMLName:        result.XMLName,
+		Prefix:         result.Prefix,
+		Marker:         result.Marker,
+		MaxKeys:        result.MaxKeys,
+		Delimiter:      result.Delimiter,
+		IsTruncated:    result.IsTruncated,
+		NextMarker:     result.NextMarker,
+		Objects:        Object,
+		CommonPrefixes: result.CommonPrefixes,
+	}, err
 }
