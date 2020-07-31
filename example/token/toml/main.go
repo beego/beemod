@@ -14,7 +14,7 @@ func main() {
 	mode = "mysql"
 	redisTokenKeyPattern = "/egoshop/token/%d"
 	accessTokenExpireInterval = 604800
-	accessTokenIss           = "github.com/goecology/egoshop"
+	accessTokenIss           = "github.com/beego/beemod"
 	accessTokenKey           = "ecologysK#xo"
 [beego.token.dev.mysql]
     debug = true
