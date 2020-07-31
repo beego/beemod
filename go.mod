@@ -16,6 +16,7 @@ require (
 	github.com/satori/uuid v1.2.0
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/spf13/viper v1.7.0
+	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.221+incompatible
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

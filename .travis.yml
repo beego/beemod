@@ -8,6 +8,7 @@ services:
   - mysql
   - redis
   - mongodb
+  - rabbitmq
 env:
   - GO111MODULE=on
 before_install:
