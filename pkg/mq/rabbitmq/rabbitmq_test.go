@@ -13,7 +13,7 @@ import (
 
 const configTpl = `
   [beego.rabbitmq.dev]
-	host = "amqp://admin:admin@127.0.0.1:5672/my_vhost"
+	host = "amqp://guest:guest@127.0.0.1:5672/"
 `
 
 func TestRabbitMQConfig(t *testing.T) {
