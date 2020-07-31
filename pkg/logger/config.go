@@ -1,6 +1,6 @@
 package logger
 
 type CallerCfg struct {
-	Level int
-	Path  string
+	Level int `ini:"level"`
+	Path  string `ini:"path"`
 }

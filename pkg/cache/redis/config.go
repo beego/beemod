@@ -7,16 +7,16 @@ import (
 type CallerCfg struct {
 	Debug bool
 
-	Network        string // tcp
-	Addr           string // 127.0.0.1:6379
-	DB             int
-	Password       string
-	ConnectTimeout module.Duration
-	ReadTimeout    module.Duration
-	WriteTimeout   module.Duration
+	Network        string `ini:"network"` // tcp
+	Addr           string `ini:"addr"` // 127.0.0.1:6379
+	DB             int `ini:"db"`
+	Password       string `ini:"password"`
+	ConnectTimeout module.Duration `ini:"connectTimeout"`
+	ReadTimeout    module.Duration `ini:"readTimeout"`
+	WriteTimeout   module.Duration `ini:"writeTimeout"`
 
-	MaxIdle     int
-	MaxActive   int
-	IdleTimeout module.Duration
-	Wait        bool
+	MaxIdle     int `ini:"maxIdle"`
+	MaxActive   int `ini:"maxActive"`
+	IdleTimeout module.Duration `ini:"idleTimeout"`
+	Wait        bool `ini:"wait"`
 }

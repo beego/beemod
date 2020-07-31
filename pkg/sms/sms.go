@@ -72,7 +72,7 @@ func provider(cfg InvokerCfg) (client standard.Sms, err error) {
 	if cfg.Mode == "alibaba" {
 		client, err = alibaba.New(cfg.Area, cfg.AccessKeyId, cfg.AccessSecret)
 	} else if cfg.Mode == "ten" {
-		client, err = tencent.New(cfg.Area, cfg.AccessKeyId, cfg.AccessSecret, cfg.domain, cfg.method, cfg.sign, cfg.timeOut)
+		client, err = tencent.New(cfg.Area, cfg.AccessKeyId, cfg.AccessSecret, cfg.Domain, cfg.Method, cfg.Sign, cfg.TimeOut)
 	} else {
 		panic(cfg.Mode + "not impl")
 	}

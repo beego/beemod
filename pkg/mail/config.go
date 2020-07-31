@@ -4,12 +4,12 @@
 package mail
 
 type InvokerCfg struct {
-	Debug        bool
-	Mode         string
-	Host         string
-	Port         int
-	FromEmail    string
-	FromPassword string
+	Debug        bool `ini:"debug"`
+	Mode         string `ini:"mode"`
+	Host         string `ini:"host"`
+	Port         int `ini:"port"`
+	FromEmail    string `ini:"fromEmail"`
+	FromPassword string `ini:"fromPassword"`
 }
 
 var DefaultInvokerCfg = InvokerCfg{
@@ -17,6 +17,6 @@ var DefaultInvokerCfg = InvokerCfg{
 	Mode:         "smtp",
 	Host:         "smtp.qq.com",
 	Port:         25,
-	FromEmail:    "1423119397@qq.com",
+	FromEmail:    "",
 	FromPassword: "",
 }
