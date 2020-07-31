@@ -12,13 +12,13 @@ env:
   - GO111MODULE=on
 before_install:
   - wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
-    sudo dpkg -i erlang-solutions_1.0_all.deb
-    sudo rm -rf erlang-solutions_1.0_all.deb
-    sudo apt-get update
-    sudo apt-get install erlang
-    wget -O - "https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey" | sudo apt-key add -
-    curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
-    sudo apt-get install rabbitmq-server
+  - sudo dpkg -i erlang-solutions_1.0_all.deb
+  - sudo rm -rf erlang-solutions_1.0_all.deb
+  - sudo apt-get update
+  - sudo apt-get install erlang
+  - wget -O - "https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey" | sudo apt-key add -
+  - curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+  - sudo apt-get install rabbitmq-server
   -./rabbitmq
   - go mod tidy
   - mysql -e 'CREATE DATABASE IF NOT EXISTS beetest;'
