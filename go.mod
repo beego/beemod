@@ -12,6 +12,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/higker/qrcode-go v0.0.2
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/satori/uuid v1.2.0
 	github.com/smartystreets/goconvey v1.6.4
@@ -19,6 +20,7 @@ require (
 	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.5.1 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go v3.0.221+incompatible
+	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/ini.v1 v1.57.0

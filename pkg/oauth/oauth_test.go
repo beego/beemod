@@ -1,37 +1,28 @@
 /**
 * @Author: myxy99 <myxy99@foxmail.com>
-* @Date: 2020/7/29 17:48
+* @Date: 2020/8/3 10:00
  */
-package social
+package oauth
 
 import (
 	"github.com/beego/beemod"
 	c "github.com/smartystreets/goconvey/convey"
+	"log"
 	"testing"
 )
 
 const configTpl = `
-[beego.oauth2.qq]
-	debug = true
-	mode  = "qq"
-	app_id  = "app_id"
-	app_secret  = "app_secret"
-	redirectURI = "www.beego.com"
-[beego.oauth2.wx]
-	debug = true
-	mode  = "wx"
-	app_id  = "app_id"
-	app_secret  = "app_secret"
-	redirectURI = "www.beego.com"
-[beego.oauth2.github]
-	debug = true
-	mode  = "github"
-	app_id  = "app_id"
-	app_secret  = "app_secret"
-	redirectURI = "www.beego.com"
+[beego.oauth2.dev]
+	state = "beego"
+	appID = "sfdhjaksfddsajks"
+	appSecret = "mnjUYj8rlXXKGS2RNgsdad7lygWrjJzjD5"
+	authURL = "http://oauthadmin.yitum.com/user/login"
+	tokenURL = "http://oauthadmin.yitum.com/api/v1/oauth/token"
+	redirectURI = "http://localhost:8000/api/code"
+	userInfoURL = "http://oauthadmin.yitum.com/api/v1/oauth/user"
 `
 
-func TestSocialConfig(t *testing.T) {
+func TestOauthConfig(t *testing.T) {
 	var (
 		err    error
 		config string
@@ -45,7 +36,7 @@ func TestSocialConfig(t *testing.T) {
 	})
 }
 
-func TestSocialInit(t *testing.T) {
+func TestOauthInit(t *testing.T) {
 	var (
 		err    error
 		config string
@@ -56,21 +47,18 @@ func TestSocialInit(t *testing.T) {
 			err = beemod.Register(DefaultBuild).SetCfg([]byte(config), "toml").Run()
 			c.So(err, c.ShouldBeNil)
 			c.Convey("Set configuration group (initialization)", func() {
-				obj := Invoker("github")
+				obj := Invoker("dev")
 				c.So(obj, c.ShouldNotBeNil)
 			})
 		})
 	})
 }
 
-func TestSocialInstance(t *testing.T) {
+func TestOauthInstance(t *testing.T) {
 	var (
-		err       error
-		obj       *Client
-		config    string
-		token     *BasicTokenInfo
-		//user      *BasicUserInfo
-		loginPage string
+		err    error
+		obj    OAuthService
+		config string
 	)
 	c.Convey("Define configuration", t, func() {
 		config = configTpl
@@ -78,19 +66,12 @@ func TestSocialInstance(t *testing.T) {
 			err = beemod.Register(DefaultBuild).SetCfg([]byte(config), "toml").Run()
 			c.So(err, c.ShouldBeNil)
 			c.Convey("Set configuration group (initialization)", func() {
-				obj = Invoker("github")
+				obj = Invoker("dev")
 				c.So(obj, c.ShouldNotBeNil)
 				c.Convey("testing method", func() {
-					loginPage = obj.LoginPage("")
-					t.Log(loginPage)
-					token, err = obj.GetAccessToken("code")
-					//c.So(err, c.ShouldBeNil)
-					c.So(true, c.ShouldBeTrue) //模拟成功
-					t.Log(token)
-					//user, err = obj.GetUserInfo(token.AccessToken)
-					//c.So(err, c.ShouldBeNil)
-					//c.So(true, c.ShouldBeTrue) //模拟成功
-					//t.Log(user.NickName)
+					page := obj.LoginPage()
+					log.Print(page)
+					c.So(err, c.ShouldBeNil)
 				})
 			})
 		})
