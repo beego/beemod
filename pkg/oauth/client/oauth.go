@@ -1,4 +1,4 @@
-package oauth
+package client
 
 import (
 	"context"
@@ -23,8 +23,8 @@ type BasicTokenInfo struct {
 }
 
 type OAuthService interface {
-	LoginPage() string
-	GetAccessToken(state, code string) (token *oauth2.Token, err error)
+	LoginPage(option ...oauth2.AuthCodeOption) string
+	GetAccessToken(state, code string, option ...oauth2.AuthCodeOption) (token *oauth2.Token, err error)
 	GetUserInfo(token *oauth2.Token, info interface{}) (user interface{}, err error)
 	GetCfg() InvokerCfg
 }
@@ -102,15 +102,15 @@ func provider(cfg InvokerCfg) (client *oauth2.Config, err error) {
 	return
 }
 
-func (c *Client) LoginPage() string {
-	return c.o.AuthCodeURL(c.cfg.State)
+func (c *Client) LoginPage(option ...oauth2.AuthCodeOption) string {
+	return c.o.AuthCodeURL(c.cfg.State, option...)
 }
 
-func (c *Client) GetAccessToken(state, code string) (token *oauth2.Token, err error) {
+func (c *Client) GetAccessToken(state, code string, option ...oauth2.AuthCodeOption) (token *oauth2.Token, err error) {
 	if state != c.cfg.State {
 		err = errors.New(fmt.Sprintf("invalid oauth state, expected '%s', got '%s'\n", c.cfg.State, state))
 	} else {
-		token, err = c.o.Exchange(context.TODO(), code)
+		token, err = c.o.Exchange(context.TODO(), code, option...)
 	}
 	return
 }

@@ -1,4 +1,4 @@
-package oauth
+package client
 
 type InvokerCfg struct {
 	Debug       bool     `ini:"debug"`
