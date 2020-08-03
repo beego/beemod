@@ -26,6 +26,7 @@ type OAuthService interface {
 	LoginPage() string
 	GetAccessToken(state, code string) (token *oauth2.Token, err error)
 	GetUserInfo(token *oauth2.Token, info interface{}) (user interface{}, err error)
+	GetCfg() InvokerCfg
 }
 
 var defaultInvoker = &descriptor{
@@ -96,6 +97,7 @@ func provider(cfg InvokerCfg) (client *oauth2.Config, err error) {
 			AuthURL:  cfg.AuthURL,
 			TokenURL: cfg.TokenURL,
 		},
+		Scopes: cfg.Scopes,
 	}
 	return
 }
@@ -133,4 +135,8 @@ func (c *Client) GetUserInfo(token *oauth2.Token, info interface{}) (user interf
 	}
 	user = info
 	return
+}
+
+func (c *Client) GetCfg() InvokerCfg {
+	return c.cfg
 }

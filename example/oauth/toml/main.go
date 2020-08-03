@@ -18,6 +18,7 @@ var config = `
 	tokenURL = "http://oauthadmin.yitum.com/api/v1/oauth/token"
 	redirectURI = "http://localhost:8000/api/code"
 	userInfoURL = "http://oauthadmin.yitum.com/api/v1/oauth/user"
+	Scopes=[]
 `
 
 type UserInfo struct {
