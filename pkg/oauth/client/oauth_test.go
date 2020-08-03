@@ -2,7 +2,7 @@
 * @Author: myxy99 <myxy99@foxmail.com>
 * @Date: 2020/8/3 10:00
  */
-package oauth
+package client
 
 import (
 	"github.com/beego/beemod"

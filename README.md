@@ -25,8 +25,6 @@
     * aliyun
     * tencent
 * oAuth
-    * QQ
-    * WeChat
-    * Github
+    * client
 * token
     * jwt-go

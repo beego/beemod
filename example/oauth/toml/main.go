@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/beego/beemod"
-	"github.com/beego/beemod/pkg/oauth"
+	client2 "github.com/beego/beemod/pkg/oauth/client"
 	"github.com/mitchellh/mapstructure"
 	"net/http"
 )
@@ -41,12 +41,12 @@ type RespUser struct {
 
 func main() {
 	err := beemod.Register(
-		oauth.DefaultBuild,
+		client2.DefaultBuild,
 	).SetCfg([]byte(config), "toml").Run()
 	if err != nil {
 		panic("register err:" + err.Error())
 	}
-	client := oauth.Invoker("dev")
+	client := client2.Invoker("dev")
 
 	http.HandleFunc("/api/login", func(writer http.ResponseWriter, request *http.Request) {
 		page := client.LoginPage()
