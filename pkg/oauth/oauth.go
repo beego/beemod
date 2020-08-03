@@ -96,6 +96,7 @@ func provider(cfg InvokerCfg) (client *oauth2.Config, err error) {
 			AuthURL:  cfg.AuthURL,
 			TokenURL: cfg.TokenURL,
 		},
+		Scopes: cfg.Scopes,
 	}
 	return
 }
