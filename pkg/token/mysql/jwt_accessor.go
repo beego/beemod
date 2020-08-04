@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"fmt"
 	"github.com/astaxie/beego/orm"
 	"github.com/beego/beemod/pkg/logger"
 	"github.com/beego/beemod/pkg/token/standard"
@@ -51,7 +50,6 @@ func (accessor *mysqlTokenAccessor) CreateAccessToken(uid int, startTime int64) 
 		}
 	} else {
 		AccessTokenData.Jti = accessToken.Jti
-		fmt.Println(AccessTokenData)
 		if _, err = accessor.db.Update(AccessTokenData); err != nil {
 			accessor.logger.Error("Update accessToken create error", err.Error())
 			return
