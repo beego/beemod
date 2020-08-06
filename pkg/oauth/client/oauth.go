@@ -13,15 +13,6 @@ import (
 	"sync"
 )
 
-type BasicUserInfo struct {
-	NickName string
-	HeadIcon string
-}
-
-type BasicTokenInfo struct {
-	AccessToken string
-}
-
 type OAuthService interface {
 	LoginPage(option ...oauth2.AuthCodeOption) string
 	GetAccessToken(state, code string, option ...oauth2.AuthCodeOption) (token *oauth2.Token, err error)
