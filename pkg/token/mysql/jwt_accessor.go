@@ -7,15 +7,6 @@ import (
 	"time"
 )
 
-// 如果你希望使用这个实现来作为token的实现，那么需要在配置文件里面设置：
-// [muses.logger.system]
-//    ...logger的配置
-// [muses.mysql.default]
-//    ...mysql的配置
-// [muses.token.jwt.mysql]
-//    logger = "system"
-//    client = "default"
-// 而后将Register()方法注册进去muses.Container(...)中
 type mysqlTokenAccessor struct {
 	standard.JwtTokenAccessor
 	logger *logger.Client
