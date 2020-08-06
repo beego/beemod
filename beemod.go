@@ -119,7 +119,6 @@ func (m *BeeMod) Run() (err error) {
 		err = errors.New("bee mod need set config")
 		return
 	}
-
 	if m.err != nil {
 		err = m.err
 		return

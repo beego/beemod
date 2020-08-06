@@ -17,6 +17,7 @@ const (
 	LogName     = "logger"
 	MongoName   = "mongo"
 	RabbitmqName   = "rabbitmq"
+	Authenticator   = "authenticator"
 )
 
 // order invokers
@@ -35,6 +36,7 @@ var OrderInvokers = []invokerAttr{
 	{RedisName},
 	{MongoName},
 	{RabbitmqName},
+	{Authenticator},
 }
 
 type invokerAttr struct {

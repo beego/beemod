@@ -28,3 +28,5 @@
     * client
 * token
     * jwt-go
+* google
+    * authenticator
