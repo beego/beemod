@@ -67,7 +67,7 @@ func TestAuthenticatorInstance(t *testing.T) {
 					key := obj.Auth.GenerateKey()
 					fmt.Println(key)
 					c.So(key, c.ShouldNotBeNil)
-					uri := obj.Auth.ProvisionURI()
+					uri := obj.Auth.ProvisionURL()
 					fmt.Println(uri)
 					c.So(uri, c.ShouldNotBeNil)
 					ok, err := obj.Auth.Authenticate("123456")
