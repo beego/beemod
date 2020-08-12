@@ -26,7 +26,7 @@ func main() {
 	obj := authenticator.Invoker("dev")
 	key := obj.Auth.GenerateKey()
 	fmt.Println(key)
-	uri := obj.Auth.ProvisionURI()
+	uri := obj.Auth.ProvisionURL()
 	fmt.Println(uri)
 	ok, err := obj.Auth.Authenticate("123456")
 	fmt.Println(ok)

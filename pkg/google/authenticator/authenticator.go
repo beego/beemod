@@ -37,7 +37,7 @@ type GoogleAuth struct {
 
 type Client struct {
 	Auth *GoogleAuth
-	cfg InvokerCfg
+	cfg  InvokerCfg
 }
 
 // default invoker build
@@ -139,7 +139,7 @@ func (g *GoogleAuth) getCode() (code string, err error) {
 }
 
 //生成url
-func (g *GoogleAuth) ProvisionURI() (codeUrl string) {
+func (g *GoogleAuth) ProvisionURL() (codeUrl string) {
 	auth := "totp/"
 	q := make(url.Values)
 	q.Add("secret", g.secret)
